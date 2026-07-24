@@ -8,7 +8,28 @@
   }
 
   body {
-    @apply bg-white text-gray-900 antialiased;
+    @apply bg-[#f8fafc] text-[#0f172a] antialiased overflow-x-hidden;
+    font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  }
+
+  ::selection {
+    @apply bg-blue-100 text-blue-900;
+  }
+
+  /* Custom Modern Light Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #f8fafc;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #3b82f6;
   }
 }
 
@@ -16,4 +37,71 @@
   .text-balance {
     text-wrap: balance;
   }
+
+  .glow-border {
+    position: relative;
+  }
+
+  .glow-border::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    background: linear-gradient(90deg, #3b82f6, #6366f1, #8b5cf6, #3b82f6);
+    background-size: 400% 400%;
+    z-index: -1;
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    animation: glow-shift 8s linear infinite;
+  }
+
+  .glow-border:hover::after {
+    opacity: 0.15;
+  }
+
+  .glow-text-indigo {
+    text-shadow: 0 0 8px rgba(99, 102, 241, 0.2), 0 0 15px rgba(99, 102, 241, 0.1);
+  }
+
+  .glow-text-purple {
+    text-shadow: 0 0 8px rgba(139, 92, 246, 0.2), 0 0 15px rgba(139, 92, 246, 0.1);
+  }
+
+  .glow-text-blue {
+    text-shadow: 0 0 8px rgba(29, 78, 216, 0.2), 0 0 15px rgba(29, 78, 216, 0.1);
+  }
 }
+
+@keyframes glow-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* CRT Scanline Effect (Softened for Light Theme) */
+.scanlines {
+  position: relative;
+  overflow: hidden;
+}
+
+.scanlines::before {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: linear-gradient(rgba(255, 255, 255, 0) 50%, rgba(200, 200, 200, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(99, 102, 241, 0.01), rgba(0, 0, 255, 0.02));
+  z-index: 20;
+  background-size: 100% 4px, 6px 100%;
+  pointer-events: none;
+}
+
+
+/* Monospace font rules for prose elements to ensure developer style */
+p, li {
+  font-family: var(--font-inter), sans-serif;
+}
+h1, h2, h3, h4, h5, h6, pre, code, button, a {
+  font-family: var(--font-mono), monospace;
+}
+
+

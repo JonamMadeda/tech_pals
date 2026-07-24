@@ -4,6 +4,7 @@ import About from "@/components/About";
 import Leaders from "@/components/Leaders";
 import Members from "@/components/Members";
 import Footer from "@/components/Footer";
+import TerminalConsole from "@/components/TerminalConsole";
 
 export default function Home() {
   return (
@@ -14,6 +15,8 @@ export default function Home() {
       <Leaders />
       <Members />
       <Footer />
+      <TerminalConsole />
     </>
   );
 }
+
