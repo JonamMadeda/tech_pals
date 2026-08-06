@@ -1,137 +1,15 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
-import { useRef } from "react";
-import { Key, Shield, User, Terminal } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { motion, useInView } from "framer-motion";
+import { Github, Globe, Key, Linkedin, Shield, Terminal } from "lucide-react";
 
-const leaders = [
-  {
-    name: "Chris J. Madeda",
-    role: "Leader & DevOps Engineer",
-    avatar: "CJM",
-    sshKey: "SHA256:d3v0ps...",
-    status: "online",
-    bio: "Automating pipelines, writing cloud templates, and managing server clusters.",
-  },
-  {
-    name: "Festus Omuga",
-    role: "Co-Leader & Machine Learning",
-    avatar: "FO",
-    sshKey: "SHA256:pyt0rch...",
-    status: "online",
-    bio: "Training deep models, fine-tuning LLMs, and building predictive features.",
-  },
-];
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.15 },
-  },
-};
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
-};
+type Leader = { id: number; name: string; avatar: string; title: string; bio: string; tags: string[] | null; github: string; linkedin: string; website: string };
 
 export default function Leaders() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-80px" });
-
-  return (
-    <section
-      id="leaders"
-      ref={ref}
-      className="border-t border-slate-200 bg-[#f8fafc] px-6 py-24 md:py-32 relative"
-    >
-      {/* Background elements */}
-      <div className="pointer-events-none absolute top-10 right-10 h-80 w-80 rounded-full bg-blue-500/[0.01] blur-[100px]" />
-
-      <div className="mx-auto max-w-6xl">
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="mb-16 max-w-2xl"
-        >
-          <span className="mb-2 block text-xs font-mono font-semibold uppercase tracking-widest text-blue-600">
-            [02] LEADERSHIP_SSH
-          </span>
-          <h2 className="text-balance text-3xl font-bold text-slate-900 sm:text-4xl">
-            Core Group Maintainers
-          </h2>
-          <p className="mt-4 text-slate-600 leading-relaxed">
-            Meet the maintainers who keep tech_pals running — managing servers, hosting dev events, and reviewing core repositories.
-          </p>
-        </motion.div>
-
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-          className="grid gap-8 md:grid-cols-2"
-        >
-          {leaders.map((leader) => (
-            <motion.div
-              key={leader.name}
-              variants={cardVariants}
-              whileHover={{ y: -6, borderColor: "rgba(59, 130, 246, 0.3)" }}
-              className="relative group rounded-xl border border-slate-200 bg-white p-6 shadow-md shadow-slate-100/60 backdrop-blur-sm transition-all duration-300 overflow-hidden"
-            >
-              {/* Top border neon line */}
-              <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-blue-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-
-              {/* SSH Session style container */}
-              <div className="flex flex-col gap-5">
-                <div className="flex items-center justify-between border-b border-slate-100 pb-4">
-                  <div className="flex items-center gap-4">
-                    {/* Avatar with status indicator */}
-                    <div className="relative">
-                      <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 text-base font-mono font-bold text-blue-700">
-                        {leader.avatar}
-                      </div>
-                      <span className="absolute -bottom-1 -right-1 h-3.5 w-3.5 rounded-full border-2 border-white bg-cyan-500 animate-pulse" />
-                    </div>
-
-                    <div>
-                      <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
-                        {leader.name}
-                      </h3>
-                      <p className="text-xs font-mono text-blue-600">
-                        {leader.role}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* SSH status indicator badge */}
-                  <span className="rounded bg-cyan-50 border border-cyan-200 px-2 py-0.5 text-[10px] font-mono text-cyan-700 uppercase tracking-widest">
-                    {leader.status}
-                  </span>
-                </div>
-
-                {/* Profile credentials */}
-                <div className="space-y-3 font-mono text-xs text-slate-500">
-                  <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-                    <span className="text-slate-400 flex items-center gap-1.5"><Key size={12} /> SSH_KEY:</span>
-                    <span className="text-slate-700">{leader.sshKey}</span>
-                  </div>
-                  <div className="flex items-start gap-1.5 border-b border-slate-100 pb-2">
-                    <span className="text-slate-400 flex items-center gap-1.5 shrink-0"><Terminal size={12} /> ABOUT:</span>
-                    <span className="text-slate-700 font-sans pl-1">{leader.bio}</span>
-                  </div>
-                  <div className="flex items-center justify-between pb-1">
-                    <span className="text-slate-400 flex items-center gap-1.5"><Shield size={12} /> AUTH:</span>
-                    <span className="text-slate-700 text-[10px] bg-blue-50 border border-blue-100 px-1.5 py-0.5 rounded">root@tech_pals</span>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-      </div>
-    </section>
-  );
+  const ref = useRef(null); const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const [leaders, setLeaders] = useState<Leader[]>([]); const [loading, setLoading] = useState(true);
+  useEffect(() => { fetch("/api/members?role=leader").then((response) => response.json()).then((data) => setLeaders(data.members ?? [])).catch(() => {}).finally(() => setLoading(false)); }, []);
+  return <section id="leaders" ref={ref} className="relative border-t border-slate-200 bg-[#f8fafc] px-6 py-24 md:py-32"><div className="pointer-events-none absolute right-10 top-10 h-80 w-80 rounded-full bg-blue-500/[0.02] blur-[100px]" /><div className="mx-auto max-w-6xl"><motion.div initial={{ opacity: 0, y: 40 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.6 }} className="mb-12 max-w-2xl"><span className="mb-2 block font-mono text-xs font-semibold uppercase tracking-widest text-blue-600">[02] LEADERSHIP</span><h2 className="text-balance text-3xl font-bold text-slate-900 sm:text-4xl">Core group maintainers</h2><p className="mt-4 leading-relaxed text-slate-600">The members currently trusted to guide the community, review core work, and help others build.</p></motion.div>
+    {loading ? <p className="font-mono text-sm text-slate-500">$ loading leadership roster...</p> : leaders.length === 0 ? <div className="rounded-xl border border-dashed border-slate-300 bg-white p-10 text-center"><Shield className="mx-auto mb-3 text-blue-400" size={28} /><p className="font-mono text-sm text-slate-500">Leadership profiles will appear here once an admin assigns the leader role.</p></div> : <motion.div initial="hidden" animate={isInView ? "visible" : "hidden"} variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.12 } } }} className="grid gap-6 md:grid-cols-2">{leaders.map((leader) => <motion.article key={leader.id} variants={{ hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 0 } }} whileHover={{ y: -4 }} className="group relative overflow-hidden rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition hover:border-blue-200 hover:shadow-md"><div className="absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-transparent via-blue-500/50 to-transparent opacity-0 transition group-hover:opacity-100" /><div className="flex items-start justify-between gap-4 border-b border-slate-100 pb-5"><div className="flex min-w-0 items-center gap-4"><div className="relative grid h-14 w-14 shrink-0 place-items-center rounded-lg border border-blue-200 bg-gradient-to-br from-blue-50 to-cyan-50 font-mono text-sm font-bold text-blue-700">{leader.avatar || leader.name.slice(0, 2).toUpperCase()}<span className="absolute -bottom-1 -right-1 h-3.5 w-3.5 rounded-full border-2 border-white bg-cyan-500" /></div><div className="min-w-0"><h3 className="truncate font-bold text-slate-900">{leader.name}</h3><p className="truncate font-mono text-xs text-blue-600">{leader.title || "Community leader"}</p></div></div><span className="rounded border border-cyan-200 bg-cyan-50 px-2 py-1 font-mono text-[9px] font-bold tracking-widest text-cyan-700">LEADER</span></div><div className="mt-5 space-y-3"><div className="flex items-center justify-between border-b border-slate-100 pb-2 font-mono text-xs"><span className="flex items-center gap-1.5 text-slate-400"><Key size={12} /> ROLE</span><span className="rounded bg-blue-50 px-1.5 py-0.5 text-[10px] text-blue-700">maintainer@tech_pals</span></div><div className="flex gap-2 text-sm leading-relaxed text-slate-600"><Terminal size={13} className="mt-1 shrink-0 text-slate-400" />{leader.bio || "Helping guide community projects and collaborations."}</div><div className="flex flex-wrap gap-1.5">{leader.tags?.map((tag) => <span key={tag} className="rounded border border-slate-200 bg-slate-50 px-2 py-0.5 font-mono text-[10px] text-slate-600">{tag}</span>)}</div><div className="flex gap-3 pt-1">{leader.github && <a href={leader.github} target="_blank" rel="noreferrer" aria-label={`${leader.name} GitHub`} className="text-slate-400 hover:text-blue-600"><Github size={15} /></a>}{leader.linkedin && <a href={leader.linkedin} target="_blank" rel="noreferrer" aria-label={`${leader.name} LinkedIn`} className="text-slate-400 hover:text-blue-600"><Linkedin size={15} /></a>}{leader.website && <a href={leader.website} target="_blank" rel="noreferrer" aria-label={`${leader.name} website`} className="text-slate-400 hover:text-blue-600"><Globe size={15} /></a>}</div></div></motion.article>)}</motion.div>}</div></section>;
 }

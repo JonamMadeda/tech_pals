@@ -139,6 +139,14 @@ export default function Hero() {
             </button>
 
             <button
+              onClick={() => { window.location.href = "/projects"; }}
+              className="group inline-flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 text-xs font-semibold uppercase tracking-wider text-white shadow-sm transition-all hover:bg-blue-700 active:scale-[0.98]"
+            >
+              Explore Projects
+              <ChevronRight size={14} className="transition-transform group-hover:translate-x-0.5" />
+            </button>
+
+            <button
               onClick={() => {
                 const el = document.getElementById("terminal-drawer-trigger");
                 if (el) el.click();

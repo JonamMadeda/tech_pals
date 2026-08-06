@@ -2,26 +2,58 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, LogIn, LogOut, Shield, UserRound } from "lucide-react";
+import { signOut } from "@/lib/auth/client";
 
 const links = [
   { href: "#about", label: "about" },
   { href: "#leaders", label: "leaders" },
   { href: "#members", label: "members" },
+  { href: "/projects", label: "projects" },
 ];
+
+type SessionUser = {
+  id: string;
+  name: string;
+  email: string;
+  image?: string | null;
+};
+
+type UserProfile = {
+  role: "admin" | "member";
+};
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("");
+  const [user, setUser] = useState<SessionUser | null>(null);
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+
+  useEffect(() => {
+    fetch("/api/auth/session")
+      .then((r) => r.json())
+      .then(async (d) => {
+        if (d.user) {
+          setUser(d.user);
+          const res = await fetch("/api/members?scope=all");
+          const data = await res.json();
+          const me = data.members?.find(
+            (m: { email: string }) => m.email === d.user.email
+          );
+          if (me) setProfile({ role: me.role });
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     const onScroll = () => {
       setScrolled(window.scrollY > 20);
 
-      // Simple active section detection
       const scrollPos = window.scrollY + 200;
       for (const link of links) {
+        if (!link.href.startsWith("#")) continue;
         const el = document.querySelector(link.href) as HTMLElement;
         if (el) {
           const top = el.offsetTop;
@@ -43,11 +75,19 @@ export default function Navbar() {
     e: React.MouseEvent<HTMLAnchorElement>,
     href: string
   ) => {
+    if (!href.startsWith("#")) return;
     e.preventDefault();
     setOpen(false);
     const el = document.querySelector(href);
     if (el) el.scrollIntoView({ behavior: "smooth" });
   };
+
+  async function handleLogout() {
+    await signOut();
+    setUser(null);
+    setProfile(null);
+    window.location.href = "/";
+  }
 
   return (
     <header
@@ -88,6 +128,38 @@ export default function Navbar() {
               </a>
             );
           })}
+
+          {/* Auth buttons */}
+          <span className="h-4 w-px bg-slate-200" />
+          {user ? (
+            <div className="flex items-center gap-3">
+              {profile?.role === "admin" && (
+                <a
+                  href="/dashboard"
+                  className="flex items-center gap-1.5 rounded-md border border-amber-200 bg-amber-50 px-3 py-1.5 font-mono text-xs font-semibold text-amber-700 transition-colors hover:bg-amber-100"
+                >
+                  <Shield size={12} />
+                  dashboard
+                </a>
+              )}
+              <a href="/member" className="flex items-center gap-1.5 rounded-md border border-blue-200 bg-blue-50 px-3 py-1.5 font-mono text-xs font-semibold text-blue-700 hover:bg-blue-100"><UserRound size={12} />my area</a>
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-1.5 rounded-md border border-slate-200 px-3 py-1.5 font-mono text-xs font-semibold text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-700"
+              >
+                <LogOut size={12} />
+                logout
+              </button>
+            </div>
+          ) : (
+            <a
+              href="/login"
+              className="flex items-center gap-1.5 rounded-md bg-blue-600 px-3 py-1.5 font-mono text-xs font-bold uppercase tracking-wider text-white transition-colors hover:bg-blue-700"
+            >
+              <LogIn size={12} />
+              login
+            </a>
+          )}
         </nav>
 
         {/* Mobile toggle */}
@@ -129,12 +201,42 @@ export default function Navbar() {
                   </a>
                 );
               })}
+
+              {/* Mobile auth */}
+              <span className="h-px bg-slate-200" />
+              {user ? (
+                <>
+                  {profile?.role === "admin" && (
+                    <a
+                      href="/dashboard"
+                      className="flex items-center gap-2 font-mono text-sm font-semibold text-amber-700 hover:text-amber-800 py-2 px-3"
+                    >
+                      <Shield size={14} />
+                      admin dashboard
+                    </a>
+                  )}
+                  <a href="/member" className="flex items-center gap-2 px-3 py-2 font-mono text-sm font-semibold text-blue-700"><UserRound size={14} />member area</a>
+                  <button
+                    onClick={handleLogout}
+                    className="flex items-center gap-2 font-mono text-sm font-semibold text-slate-500 hover:text-slate-900 py-2 px-3 text-left"
+                  >
+                    <LogOut size={14} />
+                    logout
+                  </button>
+                </>
+              ) : (
+                <a
+                  href="/login"
+                  className="flex items-center gap-2 rounded-md bg-blue-600 px-3 py-2 text-center font-mono text-sm font-bold uppercase text-white hover:bg-blue-700"
+                >
+                  <LogIn size={14} />
+                  login
+                </a>
+              )}
             </nav>
           </motion.div>
         )}
       </AnimatePresence>
     </header>
   );
-
 }
-
