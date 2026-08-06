@@ -4,9 +4,11 @@ import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useInView } from "framer-motion";
 import { Globe, Github, Linkedin, Search, Code } from "lucide-react";
+import Link from "next/link";
 
 type Member = {
   id: number;
+  username: string | null;
   name: string;
   avatar: string;
   role: string;
@@ -161,14 +163,22 @@ export default function Members() {
                   </div>
 
                   <div className="flex items-start gap-4">
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-slate-50 to-slate-100 border border-slate-200 text-sm font-bold text-slate-500 group-hover:text-blue-600 group-hover:border-blue-200 transition-all select-none">
-                      {member.avatar}
-                    </div>
+                    <Link href={`/member/${member.username || member.id}`} className="shrink-0" aria-label={`${member.name} profile`}>
+                      {member.avatar.startsWith("data:") || member.avatar.startsWith("http") ? (
+                        <img src={member.avatar} alt={member.name} className="h-12 w-12 rounded-full border border-slate-200 object-cover" />
+                      ) : (
+                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-slate-50 to-slate-100 border border-slate-200 text-sm font-bold text-slate-500 group-hover:text-blue-600 group-hover:border-blue-200 transition-all select-none">
+                          {member.avatar}
+                        </div>
+                      )}
+                    </Link>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <h3 className="text-sm font-bold text-slate-900 truncate">
-                          {member.name}
-                        </h3>
+                        <Link href={`/member/${member.username || member.id}`} className="min-w-0">
+                          <h3 className="text-sm font-bold text-slate-900 truncate hover:text-blue-600 transition-colors">
+                            {member.name}
+                          </h3>
+                        </Link>
                         <span
                           className={`shrink-0 rounded px-1.5 py-0.5 text-[9px] font-mono font-bold uppercase ${
                             member.role === "admin"

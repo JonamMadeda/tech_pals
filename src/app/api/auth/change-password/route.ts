@@ -1,10 +1,19 @@
 import { NextResponse } from "next/server";
 import { getCurrentSession } from "@/lib/auth/server";
+import { clientIp, rateLimit } from "@/lib/rate-limit";
 
 const NEON_AUTH_URL = process.env.NEON_AUTH_BASE_URL!;
 
 export async function POST(request: Request) {
   try {
+    const limited = rateLimit(`change-password:${clientIp(request)}`, 5);
+    if (!limited.ok) {
+      return NextResponse.json(
+        { error: "Too many attempts. Try again later." },
+        { status: 429, headers: { "Retry-After": String(limited.retryAfter) } }
+      );
+    }
+
     const session = await getCurrentSession();
     if (!session?.user) {
       return NextResponse.json(

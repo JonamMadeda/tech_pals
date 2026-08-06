@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { getUserByEmail } from "@/lib/db";
+import { getUserByEmail, markLogin } from "@/lib/db";
+import { clientIp, rateLimit } from "@/lib/rate-limit";
 
 const NEON_AUTH_URL = process.env.NEON_AUTH_BASE_URL!;
 
@@ -11,6 +12,14 @@ export async function POST(request: Request) {
       return NextResponse.json(
         { error: "Email and password are required." },
         { status: 400 }
+      );
+    }
+
+    const limited = rateLimit(`login:${clientIp(request)}:${String(email).toLowerCase()}`, 10);
+    if (!limited.ok) {
+      return NextResponse.json(
+        { error: "Too many attempts. Try again later." },
+        { status: 429, headers: { "Retry-After": String(limited.retryAfter) } }
       );
     }
 
@@ -41,6 +50,8 @@ export async function POST(request: Request) {
     }
 
     const neonBody = await neonRes.json();
+
+    markLogin(email);
 
     // Build our response
     const response = NextResponse.json({

@@ -1,10 +1,13 @@
 import { NextResponse } from "next/server";
 import { getCurrentSession } from "@/lib/auth/server";
 import { getUserByEmail, getUserById } from "@/lib/db";
+import { clientIp, rateLimit } from "@/lib/rate-limit";
 
 const NEON_AUTH_URL = process.env.NEON_AUTH_BASE_URL!;
 
-export async function POST(_: Request, { params }: { params: { id: string } }) {
+export async function POST(request: Request, { params }: { params: { id: string } }) {
+  const limited = rateLimit(`admin-reset:${clientIp(request)}`, 20);
+  if (!limited.ok) return NextResponse.json({ error: "Too many requests. Try again later." }, { status: 429, headers: { "Retry-After": String(limited.retryAfter) } });
   const session = await getCurrentSession();
   const admin = session?.user ? await getUserByEmail(session.user.email) : null;
   if (admin?.role !== "admin") return NextResponse.json({ error: "Administrator access required" }, { status: 403 });
