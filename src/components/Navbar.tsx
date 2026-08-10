@@ -83,7 +83,11 @@ export default function Navbar() {
   };
 
   async function handleLogout() {
-    await signOut();
+    try {
+      await signOut();
+    } catch {
+      // never block the redirect on a network hiccup
+    }
     setUser(null);
     setProfile(null);
     window.location.href = "/";
