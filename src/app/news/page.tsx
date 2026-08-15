@@ -1,17 +1,20 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { ArrowUpRight, Newspaper, ExternalLink, Search, SlidersHorizontal } from "lucide-react";
+import { ArrowLeft, ArrowRight, Newspaper, ExternalLink, Search, SlidersHorizontal } from "lucide-react";
 
 type Article = { title: string; link: string; snippet: string; pubDate: string; source: string };
 type Sort = "newest" | "oldest";
+
+const PER_PAGE = 5;
 
 export default function NewsPage() {
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState<Sort>("newest");
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     fetch("/api/news", { cache: "no-store" })
@@ -21,17 +24,21 @@ export default function NewsPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  const sources = Array.from(new Set(articles.map((a) => a.source))).sort();
+  const filtered = useMemo(() => {
+    return articles
+      .filter((article) => {
+        const text = `${article.title} ${article.snippet} ${article.source}`.toLowerCase();
+        return text.includes(query.toLowerCase());
+      })
+      .sort((a, b) => {
+        const diff = new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime();
+        return sort === "oldest" ? -diff : diff;
+      });
+  }, [articles, query, sort]);
 
-  const filtered = articles
-    .filter((article) => {
-      const text = `${article.title} ${article.snippet} ${article.source}`.toLowerCase();
-      return text.includes(query.toLowerCase());
-    })
-    .sort((a, b) => {
-      const diff = new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime();
-      return sort === "oldest" ? -diff : diff;
-    });
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PER_PAGE));
+  const safePage = Math.min(page, totalPages);
+  const paginated = filtered.slice((safePage - 1) * PER_PAGE, safePage * PER_PAGE);
 
   return (
     <div className="min-h-screen bg-[#f8fafc]">
@@ -53,7 +60,7 @@ export default function NewsPage() {
         <div className="mb-10 max-w-2xl">
           <span className="font-mono text-xs font-semibold tracking-widest text-blue-600">[ AI_INTEL ]</span>
           <h1 className="mt-3 text-4xl font-bold text-slate-900 sm:text-5xl">AI news that matters.</h1>
-          <p className="mt-4 leading-relaxed text-slate-600">Curated headlines from leading AI and tech publications, updated as stories break.</p>
+          <p className="mt-4 leading-relaxed text-slate-600">Curated headlines from leading AI and tech publications, updated daily.</p>
         </div>
 
         <section>
@@ -62,7 +69,7 @@ export default function NewsPage() {
               <Search size={15} className="absolute left-3 top-3 text-slate-400" />
               <input
                 value={query}
-                onChange={(event) => setQuery(event.target.value)}
+                onChange={(event) => { setQuery(event.target.value); setPage(1); }}
                 placeholder="Search articles, topics, or sources"
                 className="w-full rounded-lg border border-slate-200 bg-slate-50 py-2.5 pl-9 pr-3 font-mono text-xs text-slate-800 outline-none focus:border-blue-400 focus:bg-white"
               />
@@ -71,7 +78,7 @@ export default function NewsPage() {
               <SlidersHorizontal size={14} />
               <select
                 value={sort}
-                onChange={(event) => setSort(event.target.value as Sort)}
+                onChange={(event) => { setSort(event.target.value as Sort); setPage(1); }}
                 className="rounded border border-slate-200 bg-white px-2 py-1.5 outline-none"
               >
                 <option value="newest">newest</option>
@@ -94,27 +101,50 @@ export default function NewsPage() {
                 <span>NEWSFEED</span>
                 <span>{filtered.length} articles</span>
               </div>
-              <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-                {filtered.map((article, index) => (
+
+              <div className="divide-y divide-slate-200 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+                {paginated.map((article, index) => (
                   <a
                     key={index}
                     href={article.link}
                     target="_blank"
                     rel="noreferrer"
-                    className="group flex flex-col rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-blue-200 hover:shadow-md"
+                    className="group flex items-start justify-between gap-4 p-5 transition hover:bg-slate-50"
                   >
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="rounded bg-blue-50 px-2 py-0.5 font-mono text-[10px] font-semibold text-blue-700">{article.source}</span>
-                      <ExternalLink size={13} className="text-slate-300 transition group-hover:text-blue-500" />
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-3">
+                        <span className="shrink-0 rounded bg-blue-50 px-2 py-0.5 font-mono text-[10px] font-semibold text-blue-700">{article.source}</span>
+                        <time className="shrink-0 font-mono text-[10px] text-slate-400">
+                          {new Date(article.pubDate).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}
+                        </time>
+                      </div>
+                      <h2 className="mt-2 font-bold leading-snug text-slate-900 line-clamp-2 group-hover:text-blue-700">{article.title}</h2>
+                      <p className="mt-1 text-sm leading-relaxed text-slate-500 line-clamp-2">{article.snippet || "No summary available."}</p>
                     </div>
-                    <h2 className="mt-3 flex-1 font-bold leading-snug text-slate-900 line-clamp-3">{article.title}</h2>
-                    <p className="mt-2 text-sm leading-relaxed text-slate-500 line-clamp-3">{article.snippet || "No summary available."}</p>
-                    <time className="mt-4 block font-mono text-[10px] text-slate-400">
-                      {new Date(article.pubDate).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}
-                    </time>
+                    <ExternalLink size={15} className="mt-1.5 shrink-0 text-slate-300 transition group-hover:text-blue-500" />
                   </a>
                 ))}
               </div>
+
+              {totalPages > 1 && (
+                <div className="mt-6 flex items-center justify-between">
+                  <button
+                    onClick={() => setPage((p) => Math.max(1, p - 1))}
+                    disabled={safePage <= 1}
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2 font-mono text-xs font-semibold text-slate-600 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+                  >
+                    <ArrowLeft size={13} /> prev
+                  </button>
+                  <span className="font-mono text-xs text-slate-400">{safePage} / {totalPages}</span>
+                  <button
+                    onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                    disabled={safePage >= totalPages}
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2 font-mono text-xs font-semibold text-slate-600 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+                  >
+                    next <ArrowRight size={13} />
+                  </button>
+                </div>
+              )}
             </>
           )}
         </section>
