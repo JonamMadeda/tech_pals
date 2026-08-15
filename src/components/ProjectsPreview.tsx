@@ -12,23 +12,32 @@ function ProjectCard({ project, index, inView }: { project: Project; index: numb
   const [overflows, setOverflows] = useState(false);
 
   useEffect(() => {
-    const element = summaryRef.current;
-    if (element) setOverflows(element.scrollHeight > element.clientHeight);
+    const el = summaryRef.current;
+    if (el) setOverflows(el.scrollHeight > el.clientHeight);
   }, [project.summary]);
+
+  const text = project.summary || "Explore this community project.";
 
   return (
     <motion.article
-      key={project.id}
       initial={{ opacity: 0, y: 22 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ delay: index * 0.1 }}
       className="flex h-72 flex-col rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-blue-200 hover:shadow-md"
     >
-      <p className="font-mono text-[10px] text-slate-400">{project.member_avatar || project.member_name.slice(0, 2).toUpperCase()} · {project.member_name}</p>
-      <h3 className="mt-4 font-bold text-slate-900">{project.title}</h3>
-      <p ref={summaryRef} className="mt-2 line-clamp-4 text-sm leading-relaxed text-slate-600">{project.summary || "Explore this community project."}</p>
-      <div className="mt-4 flex flex-wrap gap-1">{project.tags?.slice(0, 3).map((tag) => <span key={tag} className="rounded bg-blue-50 px-2 py-0.5 font-mono text-[10px] text-blue-700">{tag}</span>)}</div>
-      {overflows && <Link href={`/member/${project.user_id}`} className="mt-auto inline-flex items-center gap-1 font-mono text-xs font-bold text-blue-600 hover:text-blue-700">Read More <ArrowUpRight size={13} /></Link>}
+      <div className="flex items-center gap-2">
+        <span className="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-blue-50 font-mono text-[10px] font-bold text-blue-600">{project.member_avatar || project.member_name.slice(0, 2).toUpperCase()}</span>
+        <span className="truncate font-mono text-[10px] text-slate-500">{project.member_name}</span>
+      </div>
+
+      <h3 className="mt-3 truncate font-bold text-slate-900">{project.title}</h3>
+
+      <p ref={summaryRef} className="mt-2 line-clamp-3 text-sm leading-relaxed text-slate-600">{text}</p>
+
+      <div className="mt-auto flex items-end justify-between gap-2">
+        <div className="flex flex-wrap gap-1">{project.tags?.slice(0, 3).map((tag) => <span key={tag} className="rounded bg-blue-50 px-2 py-0.5 font-mono text-[10px] text-blue-700">{tag}</span>)}</div>
+        {overflows && <Link href={`/member/${project.user_id}`} className="shrink-0 font-mono text-[11px] font-bold text-blue-600 hover:text-blue-700">Read More</Link>}
+      </div>
     </motion.article>
   );
 }
