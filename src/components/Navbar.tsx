@@ -10,6 +10,7 @@ const links = [
   { href: "#leaders", label: "leaders" },
   { href: "#members", label: "members" },
   { href: "/projects", label: "projects" },
+  { href: "/news", label: "news" },
 ];
 
 type SessionUser = {
