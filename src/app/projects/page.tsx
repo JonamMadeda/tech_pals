@@ -9,7 +9,7 @@ type Project = { id: number; title: string; summary: string; description: string
 type Sort = "newest" | "featured" | "alphabetical";
 
 function ProjectImage({ project, featured = false }: { project: Project; featured?: boolean }) {
-  return project.image_url ? <img src={project.image_url} alt="" className={`w-full object-cover ${featured ? "h-52" : "h-40"}`} /> : <div className={`flex w-full items-center justify-center bg-gradient-to-br from-blue-50 via-slate-50 to-cyan-50 ${featured ? "h-52" : "h-40"}`}><FolderKanban size={featured ? 42 : 32} className="text-blue-400" /></div>;
+  return project.image_url ? <img src={project.image_url} alt="" className={`w-full object-cover ${featured ? "h-52" : "h-40"}`} /> : <div className={`flex w-full items-center justify-center bg-slate-50 ${featured ? "h-52" : "h-40"}`}><FolderKanban size={featured ? 42 : 32} className="text-blue-400" /></div>;
 }
 
 function ProjectCard({ project, onReadMore, featured = false }: { project: Project; onReadMore: (p: Project) => void; featured?: boolean }) {
@@ -34,7 +34,7 @@ function ProjectCard({ project, onReadMore, featured = false }: { project: Proje
               <p className="font-mono text-[10px] text-slate-400">{project.member_avatar || project.member_name.slice(0, 2).toUpperCase()} · {project.member_name}</p>
               <h2 className="mt-2 text-lg font-bold text-slate-900">{project.title}</h2>
             </div>
-            <span className={`shrink-0 rounded px-1.5 py-0.5 font-mono text-[9px] font-bold uppercase ${project.project_url ? "bg-cyan-50 text-cyan-700" : "bg-slate-100 text-slate-600"}`}>{project.project_url ? "live" : "project"}</span>
+            <span className={`shrink-0 rounded px-1.5 py-0.5 font-mono text-[9px] font-bold uppercase ${project.project_url ? "bg-blue-50 text-blue-700" : "bg-slate-100 text-slate-600"}`}>{project.project_url ? "live" : "project"}</span>
           </div>
         )}
         {featured && <h2 className="mt-3 text-xl font-bold text-slate-900">{project.title}</h2>}

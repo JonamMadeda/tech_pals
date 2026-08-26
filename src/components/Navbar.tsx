@@ -13,6 +13,7 @@ const communityLinks = [
 
 const pageLinks = [
   { href: "/projects", label: "projects" },
+  { href: "/discussions", label: "discussions" },
   { href: "/news", label: "news" },
 ];
 
@@ -181,7 +182,7 @@ export default function Navbar() {
 
         {/* Mobile toggle */}
         <button
-          className="relative z-50 flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white/80 text-slate-500 transition-all hover:border-blue-300 hover:text-slate-850 md:hidden"
+          className="relative z-50 flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white/80 text-slate-500 transition-all hover:border-blue-300 hover:text-slate-800 md:hidden"
           onClick={() => setOpen(!open)}
           aria-label="Toggle menu"
         >

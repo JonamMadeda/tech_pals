@@ -69,12 +69,12 @@ export default function ProjectsPreview() {
   }, [modalProject]);
 
   return (
-    <section ref={ref} className="border-t border-slate-200 bg-white px-6 py-24 md:py-32">
+    <section ref={ref} className="border-t border-slate-200 bg-white px-6 py-16 md:py-24">
       <div className="mx-auto max-w-6xl">
         <motion.div initial={{ opacity: 0, y: 30 }} animate={inView ? { opacity: 1, y: 0 } : {}} className="mb-10 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
           <div className="max-w-xl">
-            <span className="font-mono text-xs font-semibold tracking-widest text-blue-600">[04] RECENT_BUILDS</span>
-            <h2 className="mt-2 text-3xl font-bold text-slate-900 sm:text-4xl">What the community is building.</h2>
+            <span className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-blue-700">Featured work</span>
+            <h2 className="mt-2 text-3xl font-semibold tracking-[-0.025em] text-slate-900 sm:text-4xl">What the community is building.</h2>
             <p className="mt-3 text-slate-600">Fresh work from member portfolios, updated automatically as projects are published.</p>
           </div>
           <Link href="/projects" className="inline-flex items-center gap-1.5 font-mono text-xs font-bold text-blue-600 hover:text-blue-700">view all projects <ArrowUpRight size={14} /></Link>

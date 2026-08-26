@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import { readSessionToken } from "@/lib/auth/cookies";
 
 const NEON_AUTH_URL = process.env.NEON_AUTH_BASE_URL!;
 
@@ -20,10 +21,9 @@ export type NeonSession = {
   };
 };
 
-/** Get current session by reading Neon Auth cookie and calling Neon Auth */
 export async function getCurrentSession(): Promise<NeonSession | null> {
   const cookieStore = await cookies();
-  const token = cookieStore.get("__Secure-neon-auth.session_token")?.value;
+  const token = readSessionToken((name) => cookieStore.get(name));
   if (!token) return null;
 
   const res = await fetch(`${NEON_AUTH_URL}/get-session`, {

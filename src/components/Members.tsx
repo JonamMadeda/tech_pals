@@ -75,7 +75,7 @@ export default function Members() {
     <section
       id="members"
       ref={ref}
-      className="border-t border-slate-200 bg-white px-6 py-24 md:py-32 relative"
+      className="border-t border-slate-200 bg-white px-6 py-16 md:py-24 relative"
     >
       <div className="mx-auto max-w-6xl">
         {/* Title */}
@@ -83,32 +83,32 @@ export default function Members() {
           initial={{ opacity: 0, y: 40 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="mb-16 max-w-2xl"
+          className="mb-10 max-w-2xl"
         >
           <span className="mb-2 block text-xs font-mono font-semibold uppercase tracking-widest text-blue-600">
-            [03] MEMBERS_LIST
+            Community directory
           </span>
-          <h2 className="text-balance text-3xl font-bold text-slate-900 sm:text-4xl">
-            Members Showcase
+          <h2 className="text-balance text-3xl font-semibold tracking-[-0.025em] text-slate-900 sm:text-4xl">
+            Meet the people behind the work.
           </h2>
-          <p className="mt-4 text-slate-650 leading-relaxed">
-            Our collective directory of developers, engineers, and creators. Use the tags or CLI search to filter.
+          <p className="mt-4 text-slate-600 leading-relaxed">
+            Explore the developers, engineers, and creators who make up the community.
           </p>
         </motion.div>
 
         {/* Filter Controls Panel */}
-        <div className="mb-10 flex flex-col gap-6 md:flex-row md:items-center md:justify-between border border-slate-200 bg-slate-50/50 p-4 rounded-xl backdrop-blur-sm">
+        <div className="mb-8 flex flex-col gap-4 border-y border-slate-200 py-4 md:flex-row md:items-center md:justify-between">
           {/* CLI Search Input */}
           <div className="relative flex-1 max-w-md">
             <span className="absolute inset-y-0 left-3.5 flex items-center text-blue-600 font-mono text-xs pointer-events-none select-none">
-              $ grep -i
+              Search
             </span>
             <input
               type="text"
-              placeholder="query..."
+              placeholder="Name, role, or skill"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-lg border border-slate-200 bg-white pl-24 pr-4 py-2.5 font-mono text-xs text-slate-800 placeholder-slate-450 focus:border-blue-500/50 focus:outline-none transition-colors"
+              className="w-full rounded-lg border border-slate-200 bg-white pl-24 pr-4 py-2.5 font-mono text-xs text-slate-800 placeholder-slate-400 focus:border-blue-500/50 focus:outline-none transition-colors"
             />
             <Search className="absolute right-3.5 top-3 text-slate-400" size={14} />
           </div>
@@ -124,7 +124,7 @@ export default function Members() {
                   className={`rounded px-2.5 py-1 text-[11px] font-mono border transition-all duration-200 ${
                     isActive
                       ? "bg-blue-50 border-blue-200 text-blue-700 font-semibold"
-                      : "bg-white border-slate-200 text-slate-500 hover:border-slate-350 hover:text-slate-700"
+                      : "bg-white border-slate-200 text-slate-500 hover:border-slate-400 hover:text-slate-700"
                   }`}
                 >
                   {isActive && <span className="mr-1 text-blue-600">✓</span>}
@@ -150,7 +150,7 @@ export default function Members() {
                 transition={{ duration: 0.3 }}
                 key={member.id}
                 whileHover={{ y: -4, borderColor: "rgba(59, 130, 246, 0.3)" }}
-                className="group relative rounded-xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md hover:shadow-slate-100 transition-all duration-300 overflow-hidden flex flex-col justify-between"
+                className="group relative flex flex-col justify-between overflow-hidden rounded-lg border border-slate-200 bg-white p-5 transition-colors hover:border-blue-200"
               >
                 <div>
                   <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-4 select-none">
@@ -167,7 +167,7 @@ export default function Members() {
                       {member.avatar.startsWith("data:") || member.avatar.startsWith("http") ? (
                         <img src={member.avatar} alt={member.name} className="h-12 w-12 rounded-full border border-slate-200 object-cover" />
                       ) : (
-                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-slate-50 to-slate-100 border border-slate-200 text-sm font-bold text-slate-500 group-hover:text-blue-600 group-hover:border-blue-200 transition-all select-none">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-full border border-slate-200 bg-slate-50 text-sm font-bold text-slate-500 transition-all group-hover:border-blue-200 group-hover:text-blue-600 select-none">
                           {member.avatar}
                         </div>
                       )}
@@ -199,7 +199,7 @@ export default function Members() {
                         {member.github && member.github !== "#" && (
                           <a
                             href={member.github}
-                            className="text-slate-400 transition-colors hover:text-slate-650"
+                            className="text-slate-400 transition-colors hover:text-slate-600"
                             aria-label={`${member.name} GitHub`}
                           >
                             <Github size={13} />
@@ -208,7 +208,7 @@ export default function Members() {
                         {member.linkedin && member.linkedin !== "#" && (
                           <a
                             href={member.linkedin}
-                            className="text-slate-400 transition-colors hover:text-slate-650"
+                            className="text-slate-400 transition-colors hover:text-slate-600"
                             aria-label={`${member.name} LinkedIn`}
                           >
                             <Linkedin size={13} />
@@ -217,7 +217,7 @@ export default function Members() {
                         {member.website && member.website !== "#" && (
                           <a
                             href={member.website}
-                            className="text-slate-400 transition-colors hover:text-slate-650"
+                            className="text-slate-400 transition-colors hover:text-slate-600"
                             aria-label={`${member.name} Website`}
                           >
                             <Globe size={13} />
@@ -246,7 +246,7 @@ export default function Members() {
                     </div>
                   )}
 
-                  <div className="mt-4 border-t border-slate-100 pt-3 flex items-center justify-between text-[10px] font-mono text-slate-450">
+                  <div className="mt-4 border-t border-slate-100 pt-3 flex items-center justify-between text-[10px] font-mono text-slate-400">
                     <span className="flex items-center gap-1"><Code size={10} /> {member.lang}</span>
                     <span className="text-slate-500">Commits: <strong className="text-blue-600 font-medium">{member.commits}</strong></span>
                   </div>
@@ -281,7 +281,7 @@ export default function Members() {
               </div>
             ) : (
               <p className="font-mono text-sm text-slate-400">
-                No matching profiles found. Run another grep search.
+                No matching profiles found. Try a different search or skill.
               </p>
             )}
           </motion.div>

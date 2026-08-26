@@ -8,7 +8,7 @@ const quickLinks = [
 
 export default function Footer() {
   return (
-    <footer className="border-t border-slate-200 bg-[#f8fafc] px-6 py-12 relative overflow-hidden">
+    <footer className="border-t border-slate-200 bg-[#fafaf8] px-6 py-12 relative overflow-hidden">
       {/* Visual background line */}
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-8 md:flex-row relative z-10">
         
@@ -45,21 +45,21 @@ export default function Footer() {
         <div className="flex items-center gap-4">
           <a
             href="#"
-            className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-400 transition-colors hover:border-slate-350 hover:text-slate-700 shadow-sm"
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-400 transition-colors hover:border-slate-300 hover:text-slate-700 shadow-sm"
             aria-label="GitHub"
           >
             <Github size={15} />
           </a>
           <a
             href="#"
-            className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-400 transition-colors hover:border-slate-350 hover:text-slate-700 shadow-sm"
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-400 transition-colors hover:border-slate-300 hover:text-slate-700 shadow-sm"
             aria-label="LinkedIn"
           >
             <Linkedin size={15} />
           </a>
           <a
             href="#"
-            className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-400 transition-colors hover:border-slate-350 hover:text-slate-700 shadow-sm"
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-400 transition-colors hover:border-slate-300 hover:text-slate-700 shadow-sm"
             aria-label="Twitter"
           >
             <Twitter size={15} />
@@ -76,7 +76,7 @@ export default function Footer() {
         {/* Live system status dashboard bar */}
         <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 select-none">
           <span className="flex items-center gap-1 border border-slate-200 bg-slate-100/60 px-2 py-0.5 rounded text-slate-600 shadow-sm">
-            <Activity size={10} className="text-cyan-600 animate-pulse" />
+            <Activity size={10} className="text-blue-600" />
             <span>STATUS: NOMINAL</span>
           </span>
           <span className="flex items-center gap-1 border border-slate-200 bg-slate-100/60 px-2 py-0.5 rounded text-slate-600 shadow-sm">
@@ -84,7 +84,7 @@ export default function Footer() {
             <span>PING: 14MS</span>
           </span>
           <span className="flex items-center gap-1 border border-slate-200 bg-slate-100/60 px-2 py-0.5 rounded text-slate-600 shadow-sm">
-            <Terminal size={10} className="text-cyan-600" />
+            <Terminal size={10} className="text-blue-600" />
             <span>ENV: PRODUCTION</span>
           </span>
           <span className="border border-slate-200 bg-slate-100/60 px-2 py-0.5 rounded text-slate-600 shadow-sm">

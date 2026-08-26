@@ -61,8 +61,8 @@ export default function ForgotPasswordPage() {
         <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
           {success ? (
             <div className="text-center">
-              <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-50">
-                <CheckCircle size={24} className="text-green-600" />
+              <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-blue-50">
+                <CheckCircle size={24} className="text-blue-600" />
               </div>
               <h2 className="mb-2 text-lg font-semibold text-slate-900">
                 Check your email

@@ -39,6 +39,25 @@ export type Project = {
   member_title?: string;
 };
 
+export type CommunityMeeting = {
+  meeting_url: string;
+  updated_at: Date;
+};
+
+export type DiscussionPost = {
+  id: number;
+  user_id: number;
+  body: string;
+  created_at: Date;
+  updated_at: Date;
+  author_name: string;
+  author_username: string | null;
+  author_avatar: string;
+  author_role: "admin" | "leader" | "member";
+  upvote_count: number;
+  has_upvoted: boolean;
+};
+
 let sqlClient: NeonQueryFunction<false, false> | null = null;
 
 function getSql(): NeonQueryFunction<false, false> {
@@ -179,6 +198,131 @@ async function ensureProjectsTable() {
     )`,
     []
   );
+}
+
+async function ensureCommunityMeetingTable() {
+  await getSql().query(
+    `CREATE TABLE IF NOT EXISTS community_meetings (
+      id SMALLINT PRIMARY KEY DEFAULT 1 CHECK (id = 1),
+      meeting_url TEXT NOT NULL DEFAULT '',
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    )`,
+    []
+  );
+}
+
+export async function getCommunityMeeting(): Promise<CommunityMeeting> {
+  await ensureCommunityMeetingTable();
+  const rows = await getSql().query(
+    "SELECT meeting_url, updated_at FROM community_meetings WHERE id = 1 LIMIT 1",
+    []
+  );
+  return (rows[0] as CommunityMeeting) ?? { meeting_url: "", updated_at: new Date(0) };
+}
+
+export async function updateCommunityMeeting(meetingUrl: string): Promise<CommunityMeeting> {
+  await ensureCommunityMeetingTable();
+  const rows = await getSql().query(
+    `INSERT INTO community_meetings (id, meeting_url, updated_at)
+     VALUES (1, $1, now())
+     ON CONFLICT (id) DO UPDATE SET meeting_url = EXCLUDED.meeting_url, updated_at = now()
+     RETURNING meeting_url, updated_at`,
+    [meetingUrl]
+  );
+  return rows[0] as CommunityMeeting;
+}
+
+async function ensureDiscussionTables() {
+  await getSql().query(
+    `CREATE TABLE IF NOT EXISTS discussion_posts (
+      id SERIAL PRIMARY KEY,
+      user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      body TEXT NOT NULL,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    )`,
+    []
+  );
+  await getSql().query(
+    `CREATE TABLE IF NOT EXISTS discussion_upvotes (
+      post_id INTEGER NOT NULL REFERENCES discussion_posts(id) ON DELETE CASCADE,
+      user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+      PRIMARY KEY (post_id, user_id)
+    )`,
+    []
+  );
+}
+
+export async function getDiscussionPosts(
+  viewerId: number,
+  options?: { limit?: number; offset?: number; sort?: "new" | "top" }
+): Promise<DiscussionPost[]> {
+  await ensureDiscussionTables();
+  const limit = Math.min(Math.max(Math.trunc(options?.limit ?? 20), 1), 100);
+  const offset = Math.max(Math.trunc(options?.offset ?? 0), 0);
+  const orderBy = options?.sort === "top"
+    ? "upvote_count DESC, p.created_at DESC, p.id DESC"
+    : "p.created_at DESC, p.id DESC";
+  const rows = await getSql().query(
+    `SELECT p.id, p.user_id, p.body, p.created_at, p.updated_at,
+      u.name AS author_name, u.username AS author_username, u.avatar AS author_avatar, u.role AS author_role,
+      COUNT(v.post_id)::int AS upvote_count,
+      COALESCE(BOOL_OR(v.user_id = $1), false) AS has_upvoted
+     FROM discussion_posts p
+     JOIN users u ON u.id = p.user_id
+     LEFT JOIN discussion_upvotes v ON v.post_id = p.id
+     GROUP BY p.id, u.id
+     ORDER BY ${orderBy}
+     LIMIT $2 OFFSET $3`,
+    [viewerId, limit, offset]
+  );
+  return rows as DiscussionPost[];
+}
+
+export async function createDiscussionPost(userId: number, body: string): Promise<DiscussionPost> {
+  await ensureDiscussionTables();
+  const rows = await getSql().query(
+    `WITH inserted AS (
+       INSERT INTO discussion_posts (user_id, body) VALUES ($1, $2) RETURNING *
+     )
+     SELECT inserted.id, inserted.user_id, inserted.body, inserted.created_at, inserted.updated_at,
+       u.name AS author_name, u.username AS author_username, u.avatar AS author_avatar, u.role AS author_role,
+       0::int AS upvote_count, false AS has_upvoted
+     FROM inserted JOIN users u ON u.id = inserted.user_id`,
+    [userId, body]
+  );
+  return rows[0] as DiscussionPost;
+}
+
+export async function updateDiscussionPost(postId: number, body: string): Promise<DiscussionPost | null> {
+  await ensureDiscussionTables();
+  const rows = await getSql().query(
+    `UPDATE discussion_posts SET body = $1, updated_at = now() WHERE id = $2
+     RETURNING id, user_id, body, created_at, updated_at`,
+    [body, postId]
+  );
+  return (rows[0] as DiscussionPost) ?? null;
+}
+
+export async function deleteDiscussionPost(postId: number) {
+  await ensureDiscussionTables();
+  await getSql().query("DELETE FROM discussion_posts WHERE id = $1", [postId]);
+}
+
+export async function getDiscussionPostOwner(postId: number): Promise<number | null> {
+  await ensureDiscussionTables();
+  const rows = await getSql().query("SELECT user_id FROM discussion_posts WHERE id = $1 LIMIT 1", [postId]);
+  return rows[0] ? Number((rows[0] as { user_id: number }).user_id) : null;
+}
+
+export async function toggleDiscussionUpvote(postId: number, userId: number): Promise<{ upvoted: boolean; count: number }> {
+  await ensureDiscussionTables();
+  const existing = await getSql().query("SELECT 1 FROM discussion_upvotes WHERE post_id = $1 AND user_id = $2", [postId, userId]);
+  const upvoted = existing.length === 0;
+  await getSql().query(upvoted ? "INSERT INTO discussion_upvotes (post_id, user_id) VALUES ($1, $2)" : "DELETE FROM discussion_upvotes WHERE post_id = $1 AND user_id = $2", [postId, userId]);
+  const countRows = await getSql().query("SELECT COUNT(*)::int AS count FROM discussion_upvotes WHERE post_id = $1", [postId]);
+  return { upvoted, count: Number((countRows[0] as { count: number }).count) };
 }
 
 export async function getProjects(userId?: number): Promise<Project[]> {

@@ -8,7 +8,6 @@ import ProjectsPreview from "@/components/ProjectsPreview";
 import CommunityFlow from "@/components/CommunityFlow";
 import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
-import TerminalConsole from "@/components/TerminalConsole";
 
 export default function Home() {
   return (
@@ -16,14 +15,13 @@ export default function Home() {
       <Navbar />
       <Hero />
       <HomeStats />
+      <ProjectsPreview />
       <About />
       <Leaders />
-      <ProjectsPreview />
       <Members />
       <CommunityFlow />
       <CTA />
       <Footer />
-      <TerminalConsole />
     </>
   );
 }

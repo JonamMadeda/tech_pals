@@ -155,7 +155,7 @@ export default function TerminalConsole() {
               <div className="flex items-center gap-2.5">
                 <Terminal size={14} className="text-blue-600" />
                 <span className="font-semibold text-slate-800">dev_console (bash)</span>
-                <span className="text-slate-350">|</span>
+                <span className="text-slate-300">|</span>
                 <span className="text-slate-500 text-[10px]">Press Ctrl + ` to toggle</span>
               </div>
               <button
