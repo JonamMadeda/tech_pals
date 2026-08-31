@@ -5,11 +5,15 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
+    width: 100%;
   }
 
   body {
-    @apply bg-[#fafaf8] text-[#172033] antialiased overflow-x-hidden;
+    @apply bg-[#fafaf8] text-[#172033] antialiased overflow-x-clip;
     font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+    width: 100%;
+    max-width: 100vw;
   }
 
   ::selection {

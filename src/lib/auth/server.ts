@@ -26,10 +26,11 @@ export async function getCurrentSession(): Promise<NeonSession | null> {
   const token = readSessionToken((name) => cookieStore.get(name));
   if (!token) return null;
 
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
   const res = await fetch(`${NEON_AUTH_URL}/get-session`, {
     headers: {
       "Content-Type": "application/json",
-      "Origin": "http://localhost:3000",
+      "Origin": appUrl,
       "Cookie": `__Secure-neon-auth.session_token=${token}`,
     },
   });

@@ -2,11 +2,18 @@ import { NextResponse } from "next/server";
 import { getCurrentSession } from "@/lib/auth/server";
 import { getUserByEmail, createUser } from "@/lib/db";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
+import { validatePassword } from "@/lib/validation";
+import { validateCsrfToken } from "@/lib/csrf";
 
 const NEON_AUTH_URL = process.env.NEON_AUTH_BASE_URL!;
 
 export async function POST(request: Request) {
   try {
+    const csrfValid = await validateCsrfToken(request);
+    if (!csrfValid) {
+      return NextResponse.json({ error: "Invalid CSRF token" }, { status: 403 });
+    }
+
     const limited = rateLimit(`register:${clientIp(request)}`, 20);
     if (!limited.ok) {
       return NextResponse.json(
@@ -42,6 +49,14 @@ export async function POST(request: Request) {
       );
     }
 
+    const passwordValidation = validatePassword(password);
+    if (!passwordValidation.valid) {
+      return NextResponse.json(
+        { error: passwordValidation.errors.join("; ") },
+        { status: 400 }
+      );
+    }
+
     // Validate role - only admin, leader, member are allowed
     const allowedRoles = ["admin", "leader", "member"];
     const memberRole = allowedRoles.includes(role) ? role : "member";
@@ -59,7 +74,7 @@ export async function POST(request: Request) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Origin": "http://localhost:3000",
+        "Origin": process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
       },
       body: JSON.stringify({ email, password, name }),
     });

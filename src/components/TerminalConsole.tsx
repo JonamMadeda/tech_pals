@@ -167,7 +167,7 @@ export default function TerminalConsole() {
             </div>
 
             {/* Logs Area */}
-            <div className="scanlines flex-1 overflow-y-auto p-6 space-y-1.5 leading-relaxed bg-white/70">
+            <div className="scanlines flex-1 overflow-y-auto overflow-x-hidden p-6 space-y-1.5 leading-relaxed bg-white/70">
               {logs.map((log, index) => {
                 let color = "text-slate-700";
                 if (log.startsWith("$")) {

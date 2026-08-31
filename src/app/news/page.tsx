@@ -41,8 +41,8 @@ export default function NewsPage() {
   const paginated = filtered.slice((safePage - 1) * PER_PAGE, safePage * PER_PAGE);
 
   return (
-    <div className="min-h-screen bg-[#f8fafc]">
-      <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/85 backdrop-blur">
+    <div className="min-h-screen overflow-hidden bg-[#f8fafc]">
+      <header className="sticky top-0 z-20 overflow-hidden border-b border-slate-200 bg-white/85 backdrop-blur">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
           <Link href="/" className="font-mono text-lg font-bold text-slate-900">
             <span className="text-blue-500">&lt;</span>tech<span className="text-blue-600">_pals</span>

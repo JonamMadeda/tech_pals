@@ -1,10 +1,15 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { ALL_SESSION_COOKIES, COOKIE_CLEAR_ATTRIBUTES, readSessionToken } from "@/lib/auth/cookies";
+import { validateCsrfToken } from "@/lib/csrf";
 
 const NEON_AUTH_URL = process.env.NEON_AUTH_BASE_URL!;
 
-export async function POST() {
+export async function POST(request: Request) {
+  const csrfValid = await validateCsrfToken(request);
+  if (!csrfValid) {
+    return NextResponse.json({ error: "Invalid CSRF token" }, { status: 403 });
+  }
   const cookieStore = await cookies();
   const token = readSessionToken((name) => cookieStore.get(name));
 

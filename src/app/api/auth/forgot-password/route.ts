@@ -1,11 +1,17 @@
 import { NextResponse } from "next/server";
 import { getUserByEmail } from "@/lib/db";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
+import { validateCsrfToken } from "@/lib/csrf";
 
 const NEON_AUTH_URL = process.env.NEON_AUTH_BASE_URL!;
 
 export async function POST(request: Request) {
   try {
+    const csrfValid = await validateCsrfToken(request);
+    if (!csrfValid) {
+      return NextResponse.json({ error: "Invalid CSRF token" }, { status: 403 });
+    }
+
     const { email } = await request.json();
 
     if (!email) {
@@ -34,15 +40,16 @@ export async function POST(request: Request) {
     }
 
     // Call Neon Auth request-password-reset endpoint
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
     const neonRes = await fetch(`${NEON_AUTH_URL}/request-password-reset`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Origin": "http://localhost:3000",
+        "Origin": appUrl,
       },
       body: JSON.stringify({
         email: email.toLowerCase(),
-        redirectTo: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/reset-password`,
+        redirectTo: `${appUrl}/reset-password`,
       }),
     });
 

@@ -81,7 +81,7 @@ export default function PublicMemberPage({ params }: { params: { identifier: str
   }
 
   return (
-    <div className="min-h-screen bg-[#f8fafc]">
+    <div className="min-h-screen overflow-hidden bg-[#f8fafc]">
       <header className="border-b border-slate-200 bg-white/85 backdrop-blur">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
           <Link href="/" className="font-mono text-lg font-bold text-slate-900">

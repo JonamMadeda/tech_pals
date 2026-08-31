@@ -13,10 +13,11 @@ export async function POST(request: Request, { params }: { params: { id: string 
   if (admin?.role !== "admin") return NextResponse.json({ error: "Administrator access required" }, { status: 403 });
   const member = await getUserById(Number(params.id));
   if (!member || member.role === "admin") return NextResponse.json({ error: "Member not found" }, { status: 404 });
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
   const response = await fetch(`${NEON_AUTH_URL}/request-password-reset`, {
     method: "POST",
-    headers: { "Content-Type": "application/json", Origin: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000" },
-    body: JSON.stringify({ email: member.email, redirectTo: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/reset-password` }),
+    headers: { "Content-Type": "application/json", Origin: appUrl },
+    body: JSON.stringify({ email: member.email, redirectTo: `${appUrl}/reset-password` }),
   });
   if (!response.ok) return NextResponse.json({ error: "Could not send reset email" }, { status: 400 });
   return NextResponse.json({ success: true });

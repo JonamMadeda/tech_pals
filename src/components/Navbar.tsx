@@ -43,12 +43,9 @@ export default function Navbar() {
       .then(async (d) => {
         if (d.user) {
           setUser(d.user);
-          const res = await fetch("/api/members?scope=all");
+          const res = await fetch("/api/members/me");
           const data = await res.json();
-          const me = data.members?.find(
-            (m: { email: string }) => m.email === d.user.email
-          );
-          if (me) setProfile({ role: me.role });
+          if (data.member) setProfile({ role: data.member.role });
         }
       })
       .catch(() => {});

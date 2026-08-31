@@ -1,10 +1,17 @@
 import { NextResponse } from "next/server";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
+import { validatePassword } from "@/lib/validation";
+import { validateCsrfToken } from "@/lib/csrf";
 
 const NEON_AUTH_URL = process.env.NEON_AUTH_BASE_URL!;
 
 export async function POST(request: Request) {
   try {
+    const csrfValid = await validateCsrfToken(request);
+    if (!csrfValid) {
+      return NextResponse.json({ error: "Invalid CSRF token" }, { status: 403 });
+    }
+
     const limited = rateLimit(`reset-password:${clientIp(request)}`, 5);
     if (!limited.ok) {
       return NextResponse.json(
@@ -22,19 +29,21 @@ export async function POST(request: Request) {
       );
     }
 
-    if (newPassword.length < 8) {
+    const passwordValidation = validatePassword(newPassword);
+    if (!passwordValidation.valid) {
       return NextResponse.json(
-        { error: "Password must be at least 8 characters" },
+        { error: passwordValidation.errors.join("; ") },
         { status: 400 }
       );
     }
 
     // Call Neon Auth reset-password endpoint
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
     const neonRes = await fetch(`${NEON_AUTH_URL}/reset-password`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Origin": "http://localhost:3000",
+        "Origin": appUrl,
       },
       body: JSON.stringify({
         newPassword,

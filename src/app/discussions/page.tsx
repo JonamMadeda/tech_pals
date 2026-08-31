@@ -242,14 +242,14 @@ export default function DiscussionsPage() {
   const canModerateAll = viewer?.role === "admin" || viewer?.role === "leader";
 
   return (
-    <div className="min-h-screen bg-[#fafaf8]">
-      <header className="border-b border-slate-200 bg-white/90">
+    <div className="min-h-screen overflow-hidden bg-[#fafaf8]">
+      <header className="overflow-hidden border-b border-slate-200 bg-white/90">
         <div className="mx-auto flex h-16 max-w-3xl items-center justify-between px-6">
           <Link href="/" className="font-mono text-lg font-bold text-slate-900"><span className="text-blue-500">&lt;</span>tech<span className="text-blue-700">_pals</span><span className="text-blue-500"> /&gt;</span></Link>
           <Link href="/member" className="rounded-md border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Member area</Link>
         </div>
       </header>
-      <main className="mx-auto max-w-3xl px-6 py-10">
+      <main className="mx-auto max-w-3xl overflow-hidden px-6 py-10">
         <div className="border-b border-slate-200 pb-7">
           <p className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-blue-700">Community conversations</p>
           <h1 className="mt-3 text-3xl font-semibold tracking-[-0.03em] text-slate-900">What are you thinking about?</h1>
@@ -291,7 +291,7 @@ export default function DiscussionsPage() {
             const voting = votingIds.includes(post.id);
             const removing = deletingId === post.id;
             return (
-              <article key={post.id} className="flex gap-4 py-6">
+              <article key={post.id} className="flex gap-4 overflow-hidden py-6">
                 <button onClick={() => vote(post)} disabled={voting} aria-label={post.has_upvoted ? "Remove upvote" : "Upvote post"} className={`flex h-12 w-11 shrink-0 flex-col items-center justify-center rounded-md border text-xs font-semibold transition-colors disabled:cursor-wait disabled:opacity-60 ${post.has_upvoted ? "border-blue-200 bg-blue-50 text-blue-700" : "border-slate-200 bg-white text-slate-500 hover:border-blue-200 hover:text-blue-700"}`}>
                   <ArrowBigUp size={18} fill={post.has_upvoted ? "currentColor" : "none"} />
                   <span>{post.upvote_count}</span>
@@ -310,7 +310,7 @@ export default function DiscussionsPage() {
                       </p>
                     </div>
                     {canManage && (
-                      <div className="ml-auto flex items-center gap-1">
+                      <div className="ml-auto flex shrink-0 flex-wrap items-center justify-end gap-1">
                         {confirmingDeleteId === post.id ? (
                           <>
                             <span className="mr-1 text-xs font-medium text-slate-500">Remove post?</span>
@@ -326,7 +326,7 @@ export default function DiscussionsPage() {
                       </div>
                     )}
                   </div>
-                  <p className="mt-3 whitespace-pre-wrap text-sm leading-7 text-slate-700">{post.body}</p>
+                   <p className="mt-3 whitespace-pre-wrap break-words text-sm leading-7 text-slate-700">{post.body}</p>
                   {post.updated_at !== post.created_at && <p className="mt-2 text-xs text-slate-400">Edited</p>}
                 </div>
               </article>

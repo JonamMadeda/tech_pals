@@ -24,19 +24,13 @@ export async function POST(request: Request) {
     }
 
     const existingUser = await getUserByEmail(email);
-    if (!existingUser) {
-      return NextResponse.json(
-        { error: "No account found with this email address." },
-        { status: 401 }
-      );
-    }
 
     // Forward the request to Neon Auth directly (preserving cookies)
     const neonRes = await fetch(`${NEON_AUTH_URL}/sign-in/email`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Origin": "http://localhost:3000",
+        "Origin": process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
       },
       body: JSON.stringify({ email, password }),
       redirect: "manual",
@@ -44,7 +38,14 @@ export async function POST(request: Request) {
 
     if (!neonRes.ok) {
       return NextResponse.json(
-        { error: "Incorrect password. Please try again." },
+        { error: "Invalid email or password. Please try again." },
+        { status: 401 }
+      );
+    }
+
+    if (!existingUser) {
+      return NextResponse.json(
+        { error: "Invalid email or password. Please try again." },
         { status: 401 }
       );
     }
