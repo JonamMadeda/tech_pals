@@ -10,8 +10,11 @@ import {
   GitPullRequest,
   Github,
   Globe,
+  Hash,
   Linkedin,
   Star,
+  Terminal,
+  ExternalLink,
 } from "lucide-react";
 
 type PublicMember = {
@@ -45,6 +48,14 @@ type PublicProject = {
   created_at: string;
 };
 
+function SectionLabel({ children }: { children: string }) {
+  return (
+    <p className="font-mono text-[11px] font-bold tracking-widest text-primary-600">
+      {children}
+    </p>
+  );
+}
+
 export default function PublicMemberPage({ params }: { params: { identifier: string } }) {
   const [member, setMember] = useState<PublicMember | null>(null);
   const [projects, setProjects] = useState<PublicProject[]>([]);
@@ -62,7 +73,16 @@ export default function PublicMemberPage({ params }: { params: { identifier: str
   }, [params.identifier]);
 
   if (state === "loading") {
-    return <div className="grid min-h-screen place-items-center bg-[#f8fafc] font-mono text-sm text-slate-500">$ fetching profile...</div>;
+    return (
+      <div className="grid min-h-screen place-items-center bg-[#f8fafc]">
+        <div className="text-center">
+          <Terminal size={20} className="mx-auto mb-3 animate-pulse text-primary-400" />
+          <p className="font-mono text-xs text-slate-400">
+            <span className="text-primary-600">$</span> fetching profile...
+          </p>
+        </div>
+      </div>
+    );
   }
 
   if (state === "notfound" || !member) {
@@ -72,7 +92,7 @@ export default function PublicMemberPage({ params }: { params: { identifier: str
           <p className="font-mono text-xs font-bold tracking-widest text-red-500">[ 404_NOT_FOUND ]</p>
           <h1 className="mt-3 text-xl font-bold text-slate-900">No such member.</h1>
           <p className="mt-2 text-sm text-slate-500">This handle does not exist in the registry.</p>
-          <Link href="/" className="mt-6 inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 font-mono text-xs font-bold text-white hover:bg-blue-700">
+          <Link href="/" className="mt-6 inline-flex items-center gap-2 rounded-lg bg-primary-600 px-4 py-2 font-mono text-xs font-bold text-white transition-colors hover:bg-primary-700">
             <ArrowLeft size={14} />back home
           </Link>
         </div>
@@ -82,88 +102,155 @@ export default function PublicMemberPage({ params }: { params: { identifier: str
 
   return (
     <div className="min-h-screen overflow-hidden bg-[#f8fafc]">
-      <header className="border-b border-slate-200 bg-white/85 backdrop-blur">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
+      <header className="border-b border-slate-200 bg-white/90 backdrop-blur">
+        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
           <Link href="/" className="font-mono text-lg font-bold text-slate-900">
-            <span className="text-blue-500">&lt;</span>tech<span className="text-blue-600">_pals</span><span className="text-blue-500"> /&gt;</span>
+            <span className="text-primary-500">&lt;</span>tech<span className="text-primary-600">_pals</span><span className="text-primary-500"> /&gt;</span>
           </Link>
-          <Link href="/#members" className="rounded-lg border border-slate-200 px-3 py-2 font-mono text-xs text-slate-600 hover:bg-slate-50">members list</Link>
+          <Link href="/#members" className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-2 font-mono text-xs text-slate-600 transition-colors hover:bg-slate-50">
+            <ArrowLeft size={13} />members list
+          </Link>
         </div>
       </header>
 
-      <main className="mx-auto max-w-6xl px-6 py-10">
-        <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
-          <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
+      <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
+          {/* Header row */}
+          <div className="mb-6 flex items-center justify-between border-b border-slate-100 pb-5">
+            <div className="flex items-center gap-2">
+              <Terminal size={15} className="text-primary-600" />
+              <span className="font-mono text-xs font-bold text-slate-900">[ PUBLIC_PROFILE ]</span>
+            </div>
+            <Link href="/#members" className="font-mono text-[11px] font-semibold text-primary-600 transition-colors hover:text-primary-700">
+              &lt;- back
+            </Link>
+          </div>
+
+          {/* Identity */}
+          <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
             <div className="shrink-0">
               {member.avatar.startsWith("data:") || member.avatar.startsWith("http") ? (
-                <img src={member.avatar} alt={member.name} className="h-20 w-20 rounded-2xl border border-blue-100 object-cover" />
+                <img src={member.avatar} alt={member.name} className="h-20 w-20 rounded-2xl border border-slate-200 object-cover sm:h-24 sm:w-24" />
               ) : (
-                <div className="grid h-20 w-20 place-items-center rounded-2xl border border-blue-100 bg-blue-50 font-mono text-2xl font-bold text-blue-700">{member.avatar || member.name.slice(0, 2).toUpperCase()}</div>
+                <div className="grid h-20 w-20 place-items-center rounded-2xl border border-primary-100 bg-primary-50 font-mono text-2xl font-bold text-primary-700 sm:h-24 sm:w-24">{member.avatar || member.name.slice(0, 2).toUpperCase()}</div>
               )}
             </div>
             <div className="min-w-0 flex-1">
-              <div className="flex flex-wrap items-center gap-2">
-                <h1 className="text-2xl font-bold text-slate-900">{member.name}</h1>
-                <span className={`rounded px-2 py-0.5 font-mono text-[10px] font-bold uppercase ${member.role === "leader" ? "bg-purple-100 text-purple-700" : "bg-blue-100 text-blue-700"}`}>{member.role}</span>
-                {member.username && <span className="rounded bg-slate-100 px-2 py-0.5 font-mono text-[10px] text-slate-500">@{member.username}</span>}
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5">
+                <h1 className="truncate text-xl font-bold text-slate-900 sm:text-2xl">{member.name}</h1>
+                <span className={`shrink-0 rounded-md px-2 py-0.5 font-mono text-[10px] font-bold uppercase ${member.role === "leader" ? "bg-purple-100 text-purple-700" : "bg-primary-100 text-primary-700"}`}>{member.role}</span>
+                {member.username && (
+                  <span className="flex shrink-0 items-center gap-0.5 rounded-md bg-slate-100 px-2 py-0.5 font-mono text-[10px] text-slate-500">
+                    <Hash size={9} />
+                    {member.username}
+                  </span>
+                )}
               </div>
-              <p className="mt-1 font-mono text-sm text-slate-500">{member.title || "member"}</p>
-              <div className="mt-3 flex items-center gap-3">
-                {member.github && <a href={member.github} target="_blank" rel="noreferrer" aria-label="GitHub" className="text-slate-400 hover:text-blue-600"><Github size={16} /></a>}
-                {member.linkedin && <a href={member.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn" className="text-slate-400 hover:text-blue-600"><Linkedin size={16} /></a>}
-                {member.website && <a href={member.website} target="_blank" rel="noreferrer" aria-label="Website" className="text-slate-400 hover:text-blue-600"><Globe size={16} /></a>}
+              <p className="mt-1 font-mono text-xs text-slate-500 sm:text-sm">{member.title || "member"}</p>
+              <div className="mt-3 flex items-center gap-2">
+                {member.github && <a href={member.github} target="_blank" rel="noreferrer" aria-label="GitHub" className="rounded-lg p-2 text-slate-400 transition-colors hover:bg-slate-50 hover:text-slate-700"><Github size={16} /></a>}
+                {member.linkedin && <a href={member.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn" className="rounded-lg p-2 text-slate-400 transition-colors hover:bg-slate-50 hover:text-slate-700"><Linkedin size={16} /></a>}
+                {member.website && <a href={member.website} target="_blank" rel="noreferrer" aria-label="Website" className="rounded-lg p-2 text-slate-400 transition-colors hover:bg-slate-50 hover:text-slate-700"><Globe size={16} /></a>}
               </div>
             </div>
-            <div className="grid grid-cols-3 gap-3 sm:w-72">
-              <div className="rounded-lg bg-slate-50 p-3 text-center">
-                <GitPullRequest size={16} className="mx-auto text-blue-500" />
-                <p className="mt-2 text-lg font-bold text-slate-900">{member.prs}</p>
-                <p className="font-mono text-[10px] text-slate-400">PRS</p>
-              </div>
-              <div className="rounded-lg bg-slate-50 p-3 text-center">
-                <Code size={16} className="mx-auto text-blue-500" />
-                <p className="mt-2 text-lg font-bold text-slate-900">{member.commits}</p>
-                <p className="font-mono text-[10px] text-slate-400">COMMITS</p>
-              </div>
-              <div className="rounded-lg bg-slate-50 p-3 text-center">
-                <CalendarDays size={16} className="mx-auto text-blue-500" />
-                <p className="mt-2 text-lg font-bold text-slate-900">{new Date(member.created_at).toLocaleDateString()}</p>
-                <p className="font-mono text-[10px] text-slate-400">JOINED</p>
+
+            {/* Activity stats */}
+            <div className="w-full sm:w-72">
+              <SectionLabel>ACTIVITY</SectionLabel>
+              <div className="mt-2 grid grid-cols-3 gap-2">
+                <div className="rounded-xl border border-slate-200 bg-white p-2.5 text-center">
+                  <GitPullRequest size={14} className="mx-auto text-primary-500" />
+                  <p className="mt-1.5 truncate text-sm font-bold text-slate-900 sm:text-base">{member.prs}</p>
+                  <p className="font-mono text-[9px] font-semibold tracking-widest text-slate-400 sm:text-[10px]">PRS</p>
+                </div>
+                <div className="rounded-xl border border-slate-200 bg-white p-2.5 text-center">
+                  <Code size={14} className="mx-auto text-primary-500" />
+                  <p className="mt-1.5 truncate text-sm font-bold text-slate-900 sm:text-base">{member.commits}</p>
+                  <p className="font-mono text-[9px] font-semibold tracking-widest text-slate-400 sm:text-[10px]">COMMITS</p>
+                </div>
+                <div className="rounded-xl border border-slate-200 bg-white p-2.5 text-center">
+                  <CalendarDays size={14} className="mx-auto text-primary-500" />
+                  <p className="mt-1.5 truncate text-sm font-bold text-slate-900 sm:text-base" title={new Date(member.created_at).toLocaleDateString()}>{new Date(member.created_at).toLocaleDateString()}</p>
+                  <p className="font-mono text-[9px] font-semibold tracking-widest text-slate-400 sm:text-[10px]">JOINED</p>
+                </div>
               </div>
             </div>
           </div>
-          {member.bio && <p className="mt-6 max-w-3xl text-sm leading-relaxed text-slate-600">{member.bio}</p>}
-          <div className="mt-6 flex flex-wrap items-center gap-2">
-            <span className="flex items-center gap-1 rounded bg-slate-100 px-2 py-1 font-mono text-[10px] text-slate-500"><Code size={10} />{member.lang || "n/a"}</span>
-            {member.tags?.map((tag) => <span key={tag} className="rounded bg-blue-50 px-2 py-0.5 font-mono text-[10px] text-blue-700">{tag}</span>)}
-          </div>
+
+          {/* About */}
+          {member.bio && (
+            <div className="mt-6 border-t border-slate-100 pt-5">
+              <SectionLabel>ABOUT</SectionLabel>
+              <p className="mt-2 max-w-3xl text-xs leading-relaxed text-slate-600 sm:text-sm">
+                {member.bio}
+              </p>
+            </div>
+          )}
+
+          {/* Skills */}
+          {(member.lang || member.tags?.length) && (
+            <div className="mt-6 border-t border-slate-100 pt-5">
+              <SectionLabel>SKILLS</SectionLabel>
+              <div className="mt-2.5 flex flex-wrap items-center gap-1.5 sm:gap-2">
+                {member.lang && (
+                  <span className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1 font-mono text-[10px] font-semibold text-slate-700">
+                    <Terminal size={11} className="text-primary-600" />
+                    {member.lang}
+                  </span>
+                )}
+                {member.tags?.map((tag) => (
+                  <span key={tag} className="rounded-lg border border-primary-100 bg-primary-50 px-2.5 py-1 font-mono text-[10px] font-medium text-primary-700">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
+        {/* Projects */}
         <section className="mt-8">
-          <div className="mb-5 flex items-center justify-between">
-            <h2 className="font-bold text-slate-900">Published projects</h2>
-            <span className="rounded bg-slate-100 px-2 py-1 font-mono text-xs text-slate-500">{projects.length}</span>
+          <div className="mb-4 flex items-center justify-between">
+            <p className="font-mono text-[11px] font-bold tracking-widest text-primary-600">PROJECTS</p>
+            <span className="rounded-md bg-slate-100 px-2 py-1 font-mono text-[10px] font-semibold text-slate-500">{projects.length}</span>
           </div>
           {projects.length === 0 ? (
-            <div className="rounded-2xl border border-dashed border-slate-200 bg-white p-12 text-center">
-              <FolderKanban className="mx-auto mb-3 text-blue-400" size={32} />
-              <p className="font-mono text-sm text-slate-500">No public projects yet.</p>
+            <div className="rounded-2xl border border-dashed border-slate-200 bg-white p-10 text-center">
+              <FolderKanban className="mx-auto mb-3 text-primary-400" size={32} />
+              <p className="font-mono text-xs text-slate-500">No public projects yet.</p>
             </div>
           ) : (
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
               {projects.map((project) => (
-                <article key={project.id} className="flex flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:shadow-md">
+                <article key={project.id} className="group flex flex-col rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-primary-200 hover:shadow-md sm:p-5">
                   <div className="flex items-start justify-between gap-2">
-                    <h3 className="font-bold text-slate-900">{project.title}</h3>
-                    {project.featured && <span className="flex shrink-0 items-center gap-1 rounded bg-amber-50 px-2 py-0.5 font-mono text-[9px] font-bold text-amber-700"><Star size={10} />FEATURED</span>}
+                    <h3 className="min-w-0 flex-1 truncate text-sm font-semibold text-slate-900 sm:text-base">{project.title}</h3>
+                    {project.featured && (
+                      <span className="flex shrink-0 items-center gap-0.5 rounded bg-amber-50 px-1.5 py-0.5 font-mono text-[8px] font-bold text-amber-700 sm:text-[9px]">
+                        <Star size={9} />
+                        FEATURED
+                      </span>
+                    )}
                   </div>
-                  <p className="mt-2 flex-1 text-sm text-slate-500">{project.summary || project.description || "No summary added."}</p>
+                  <p className="mt-2 flex-1 text-xs leading-relaxed text-slate-500 sm:text-sm">{project.summary || project.description || "No summary added."}</p>
                   {project.tags?.length ? (
-                    <div className="mt-4 flex flex-wrap gap-1">{project.tags.map((tag) => <span key={tag} className="rounded bg-blue-50 px-2 py-0.5 font-mono text-[10px] text-blue-700">{tag}</span>)}</div>
+                    <div className="mt-3 flex flex-wrap gap-1">
+                      {project.tags.slice(0, 4).map((tag) => (
+                        <span key={tag} className="rounded bg-primary-50 px-1.5 py-0.5 font-mono text-[9px] text-primary-700 sm:text-[10px]">{tag}</span>
+                      ))}
+                    </div>
                   ) : null}
                   <div className="mt-4 flex gap-2 border-t border-slate-100 pt-3">
-                    {project.project_url && <a href={project.project_url} target="_blank" rel="noreferrer" className="flex-1 rounded-lg border border-slate-200 px-3 py-2 text-center font-mono text-xs text-slate-600 hover:bg-slate-50">live</a>}
-                    {project.github_url && <a href={project.github_url} target="_blank" rel="noreferrer" className="flex-1 rounded-lg border border-slate-200 px-3 py-2 text-center font-mono text-xs text-slate-600 hover:bg-slate-50">code</a>}
+                    {project.project_url && (
+                      <a href={project.project_url} target="_blank" rel="noreferrer" className="flex-1 inline-flex items-center justify-center gap-1 rounded-lg border border-slate-200 px-3 py-2 text-center font-mono text-[11px] text-slate-600 transition-colors hover:bg-slate-50">
+                        <ExternalLink size={11} />live
+                      </a>
+                    )}
+                    {project.github_url && (
+                      <a href={project.github_url} target="_blank" rel="noreferrer" className="flex-1 inline-flex items-center justify-center gap-1 rounded-lg border border-slate-200 px-3 py-2 text-center font-mono text-[11px] text-slate-600 transition-colors hover:bg-slate-50">
+                        <Github size={11} />code
+                      </a>
+                    )}
                   </div>
                 </article>
               ))}

@@ -17,7 +17,7 @@
   }
 
   ::selection {
-    @apply bg-blue-100 text-blue-900;
+    @apply bg-primary-100 text-primary-900;
   }
 
   ::-webkit-scrollbar {
@@ -32,7 +32,7 @@
     border-radius: 3px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #2563eb;
+    background: #000047;
   }
 }
 

@@ -62,10 +62,10 @@ function LoginForm() {
             href="/"
             className="inline-flex items-center gap-1.5 font-mono text-xl font-bold text-slate-900"
           >
-            <span className="text-blue-500">&lt;</span>
+            <span className="text-primary-500">&lt;</span>
             <span>tech</span>
-            <span className="text-blue-600">_pals</span>
-            <span className="text-blue-500">&nbsp;/&gt;</span>
+            <span className="text-primary-600">_pals</span>
+            <span className="text-primary-500">&nbsp;/&gt;</span>
           </Link>
           <h1 className="mt-4 text-lg font-bold text-slate-900">Sign in</h1>
           <p className="mt-1 text-sm text-slate-500">
@@ -78,7 +78,7 @@ function LoginForm() {
           className="space-y-4 rounded-xl border border-slate-200 bg-white p-6 shadow-sm"
         >
           {successMsg && (
-            <div className="rounded-md border border-blue-200 bg-blue-50 px-3 py-2 font-mono text-xs text-blue-700">
+            <div className="rounded-md border border-primary-200 bg-primary-50 px-3 py-2 font-mono text-xs text-primary-700">
               {successMsg}
             </div>
           )}
@@ -103,7 +103,7 @@ function LoginForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@example.com"
-              className="w-full rounded-lg border border-slate-200 px-3 py-2 font-mono text-sm text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/30"
+              className="w-full rounded-lg border border-slate-200 px-3 py-2 font-mono text-sm text-slate-900 placeholder-slate-400 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500/30"
             />
           </div>
 
@@ -122,7 +122,7 @@ function LoginForm() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full rounded-lg border border-slate-200 px-3 py-2 pr-10 font-mono text-sm text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/30"
+                className="w-full rounded-lg border border-slate-200 px-3 py-2 pr-10 font-mono text-sm text-slate-900 placeholder-slate-400 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500/30"
               />
               <button
                 type="button"
@@ -138,7 +138,7 @@ function LoginForm() {
           <div className="flex items-center justify-between">
             <Link
               href="/forgot-password"
-              className="font-mono text-xs text-slate-500 hover:text-blue-600 transition-colors"
+              className="font-mono text-xs text-slate-500 hover:text-primary-600 transition-colors"
             >
               forgot password?
             </Link>
@@ -147,14 +147,14 @@ function LoginForm() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-lg bg-blue-600 px-4 py-2.5 font-mono text-xs font-bold uppercase tracking-wider text-white transition-colors hover:bg-blue-700 disabled:opacity-50"
+            className="w-full rounded-lg bg-primary-600 px-4 py-2.5 font-mono text-xs font-bold uppercase tracking-wider text-white transition-colors hover:bg-primary-700 disabled:opacity-50"
           >
             {loading ? "Signing in..." : "$ login"}
           </button>
         </form>
 
         <p className="mt-6 text-center text-xs text-slate-500">
-          <Link href="/" className="text-blue-600 hover:underline">
+          <Link href="/" className="text-primary-600 hover:underline">
             &larr; Back to site
           </Link>
         </p>

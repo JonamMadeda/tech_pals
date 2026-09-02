@@ -135,7 +135,7 @@ export default function TerminalConsole() {
       <button
         id="terminal-drawer-trigger"
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 z-40 flex h-12 w-12 items-center justify-center rounded-full border border-blue-250 bg-white text-blue-600 shadow-lg shadow-slate-200 backdrop-blur transition-all hover:bg-blue-50 hover:text-blue-700 hover:border-blue-300 active:scale-95"
+        className="fixed bottom-6 right-6 z-40 flex h-12 w-12 items-center justify-center rounded-full border border-primary-250 bg-white text-primary-600 shadow-lg shadow-slate-200 backdrop-blur transition-all hover:bg-primary-50 hover:text-primary-700 hover:border-primary-300 active:scale-95"
         title="Open terminal console (Ctrl + `)"
       >
         <Terminal size={20} className="animate-pulse" />
@@ -153,7 +153,7 @@ export default function TerminalConsole() {
             {/* Console Tab header */}
             <div className="flex h-11 items-center justify-between border-b border-slate-200 bg-slate-100 px-6 select-none">
               <div className="flex items-center gap-2.5">
-                <Terminal size={14} className="text-blue-600" />
+                <Terminal size={14} className="text-primary-600" />
                 <span className="font-semibold text-slate-800">dev_console (bash)</span>
                 <span className="text-slate-300">|</span>
                 <span className="text-slate-500 text-[10px]">Press Ctrl + ` to toggle</span>
@@ -171,7 +171,7 @@ export default function TerminalConsole() {
               {logs.map((log, index) => {
                 let color = "text-slate-700";
                 if (log.startsWith("$")) {
-                  color = "text-blue-600 font-bold";
+                  color = "text-primary-600 font-bold";
                 } else if (log.includes("help") || log.includes("-")) {
                   color = "text-slate-500";
                 } else if (log.includes("Mission") || log.includes("Active Member")) {
@@ -195,7 +195,7 @@ export default function TerminalConsole() {
               onSubmit={handleSubmit}
               className="h-12 border-t border-slate-200 bg-slate-50 px-6 flex items-center gap-2"
             >
-              <ChevronRight size={14} className="text-blue-600 shrink-0" />
+              <ChevronRight size={14} className="text-primary-600 shrink-0" />
               <input
                 ref={inputRef}
                 type="text"

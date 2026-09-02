@@ -32,7 +32,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable} scroll-smooth overflow-x-hidden`}>
-      <body className="relative min-h-screen w-full overflow-x-hidden bg-[#fafaf8] text-[#172033] selection:bg-blue-100 selection:text-blue-900">
+      <body className="relative min-h-screen w-full overflow-x-hidden bg-[#fafaf8] text-[#172033] selection:bg-primary-100 selection:text-primary-900">
         <div className="relative z-10 flex min-h-screen w-full max-w-full flex-col overflow-x-hidden">
           <SpotlightTracker />
           {children}

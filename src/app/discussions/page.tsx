@@ -61,7 +61,7 @@ function Avatar({ post }: { post: Post }) {
   if (avatar.startsWith("data:") || avatar.startsWith("http")) {
     return <img src={avatar} alt="" loading="lazy" decoding="async" referrerPolicy="no-referrer" className="h-8 w-8 rounded-full border border-slate-200 object-cover" />;
   }
-  return <span className="grid h-8 w-8 place-items-center rounded-full bg-blue-50 font-mono text-[10px] font-bold text-blue-700">{avatar || post.author_name.slice(0, 2).toUpperCase()}</span>;
+  return <span className="grid h-8 w-8 place-items-center rounded-full bg-primary-50 font-mono text-[10px] font-bold text-primary-700">{avatar || post.author_name.slice(0, 2).toUpperCase()}</span>;
 }
 
 export default function DiscussionsPage() {
@@ -245,13 +245,13 @@ export default function DiscussionsPage() {
     <div className="min-h-screen overflow-hidden bg-[#fafaf8]">
       <header className="overflow-hidden border-b border-slate-200 bg-white/90">
         <div className="mx-auto flex h-16 max-w-3xl items-center justify-between px-6">
-          <Link href="/" className="font-mono text-lg font-bold text-slate-900"><span className="text-blue-500">&lt;</span>tech<span className="text-blue-700">_pals</span><span className="text-blue-500"> /&gt;</span></Link>
+          <Link href="/" className="font-mono text-lg font-bold text-slate-900"><span className="text-primary-500">&lt;</span>tech<span className="text-primary-700">_pals</span><span className="text-primary-500"> /&gt;</span></Link>
           <Link href="/member" className="rounded-md border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Member area</Link>
         </div>
       </header>
       <main className="mx-auto max-w-3xl overflow-hidden px-6 py-10">
         <div className="border-b border-slate-200 pb-7">
-          <p className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-blue-700">Community conversations</p>
+          <p className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-primary-700">Community conversations</p>
           <h1 className="mt-3 text-3xl font-semibold tracking-[-0.03em] text-slate-900">What are you thinking about?</h1>
           <p className="mt-3 max-w-xl text-sm leading-6 text-slate-600">Share an idea, a question, a useful link, or a lesson from your work.</p>
         </div>
@@ -264,7 +264,7 @@ export default function DiscussionsPage() {
         <div className="mt-5 flex items-center justify-end">
           <div className="inline-flex rounded-md border border-slate-200 bg-white p-0.5" role="group" aria-label="Sort discussions">
             {(["new", "top"] as Sort[]).map((option) => (
-              <button key={option} onClick={() => changeSort(option)} aria-pressed={sort === option} className={`rounded px-3 py-1.5 font-mono text-xs font-semibold transition-colors ${sort === option ? "bg-blue-50 text-blue-700" : "text-slate-500 hover:text-slate-700"}`}>
+              <button key={option} onClick={() => changeSort(option)} aria-pressed={sort === option} className={`rounded px-3 py-1.5 font-mono text-xs font-semibold transition-colors ${sort === option ? "bg-primary-50 text-primary-700" : "text-slate-500 hover:text-slate-700"}`}>
                 {option === "new" ? "Newest" : "Top"}
               </button>
             ))}
@@ -278,11 +278,11 @@ export default function DiscussionsPage() {
               <MessageSquareText className="mx-auto mb-4 text-slate-300" size={32} />
               <h2 className="font-semibold text-slate-900">Could not load discussions.</h2>
               <p className="mt-2 text-sm text-slate-500">Check your connection and try again.</p>
-              <button onClick={() => load(sort)} className="mt-4 rounded-md bg-blue-700 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-800">Try again</button>
+              <button onClick={() => load(sort)} className="mt-4 rounded-md bg-primary-700 px-4 py-2 text-sm font-semibold text-white hover:bg-primary-800">Try again</button>
             </div>
           ) : posts.length === 0 ? (
             <div className="py-16 text-center">
-              <MessageSquareText className="mx-auto mb-4 text-blue-400" size={32} />
+              <MessageSquareText className="mx-auto mb-4 text-primary-400" size={32} />
               <h2 className="font-semibold text-slate-900">Start the conversation.</h2>
               <p className="mt-2 text-sm text-slate-500">Be the first to share a thought with the community.</p>
             </div>
@@ -292,7 +292,7 @@ export default function DiscussionsPage() {
             const removing = deletingId === post.id;
             return (
               <article key={post.id} className="flex gap-4 overflow-hidden py-6">
-                <button onClick={() => vote(post)} disabled={voting} aria-label={post.has_upvoted ? "Remove upvote" : "Upvote post"} className={`flex h-12 w-11 shrink-0 flex-col items-center justify-center rounded-md border text-xs font-semibold transition-colors disabled:cursor-wait disabled:opacity-60 ${post.has_upvoted ? "border-blue-200 bg-blue-50 text-blue-700" : "border-slate-200 bg-white text-slate-500 hover:border-blue-200 hover:text-blue-700"}`}>
+                <button onClick={() => vote(post)} disabled={voting} aria-label={post.has_upvoted ? "Remove upvote" : "Upvote post"} className={`flex h-12 w-11 shrink-0 flex-col items-center justify-center rounded-md border text-xs font-semibold transition-colors disabled:cursor-wait disabled:opacity-60 ${post.has_upvoted ? "border-primary-200 bg-primary-50 text-primary-700" : "border-slate-200 bg-white text-slate-500 hover:border-primary-200 hover:text-primary-700"}`}>
                   <ArrowBigUp size={18} fill={post.has_upvoted ? "currentColor" : "none"} />
                   <span>{post.upvote_count}</span>
                 </button>
@@ -302,7 +302,7 @@ export default function DiscussionsPage() {
                     <div className="min-w-0">
                       <p className="truncate text-sm font-semibold text-slate-900">
                         {post.author_name}
-                        {post.author_role !== "member" && <span className="ml-1 font-mono text-[10px] font-semibold uppercase text-blue-700">{post.author_role === "admin" ? "Admin" : "Leader"}</span>}
+                        {post.author_role !== "member" && <span className="ml-1 font-mono text-[10px] font-semibold uppercase text-primary-700">{post.author_role === "admin" ? "Admin" : "Leader"}</span>}
                       </p>
                       <p className="text-xs text-slate-500">
                         {post.author_username ? `@${post.author_username} · ` : ""}
@@ -342,7 +342,7 @@ export default function DiscussionsPage() {
         )}
       </main>
       {viewer && !composing && !editing && (
-        <button onClick={() => setComposing(true)} aria-label="New thought" className="fixed bottom-6 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-blue-700 text-white shadow-lg transition-colors hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:bottom-8 sm:right-8">
+        <button onClick={() => setComposing(true)} aria-label="New thought" className="fixed bottom-6 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-primary-700 text-white shadow-lg transition-colors hover:bg-primary-800 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 sm:bottom-8 sm:right-8">
           <Plus size={22} />
         </button>
       )}
@@ -355,12 +355,12 @@ export default function DiscussionsPage() {
               <button type="button" onClick={() => !saving && setComposing(false)} className="rounded p-1 text-slate-400 hover:bg-slate-100" aria-label="Close"><X size={18} /></button>
             </div>
             <label className="sr-only" htmlFor="new-post">Share a thought</label>
-            <textarea ref={composeTextareaRef} id="new-post" value={body} onChange={(event) => setBody(event.target.value)} maxLength={MAX_LENGTH} rows={7} placeholder="Start a discussion…" className="mt-4 w-full resize-y rounded-md border border-slate-300 p-3 text-sm leading-6 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100" />
+            <textarea ref={composeTextareaRef} id="new-post" value={body} onChange={(event) => setBody(event.target.value)} maxLength={MAX_LENGTH} rows={7} placeholder="Start a discussion…" className="mt-4 w-full resize-y rounded-md border border-slate-300 p-3 text-sm leading-6 outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100" />
             <div className="mt-4 flex items-center justify-between">
               <span className="text-xs text-slate-400">{body.length}/{MAX_LENGTH}</span>
               <div className="flex gap-3">
                 <button type="button" onClick={() => !saving && setComposing(false)} className="rounded-md px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-50">Cancel</button>
-                <button disabled={saving || !body.trim()} className="inline-flex items-center gap-2 rounded-md bg-blue-700 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-800 disabled:opacity-50">
+                <button disabled={saving || !body.trim()} className="inline-flex items-center gap-2 rounded-md bg-primary-700 px-4 py-2 text-sm font-semibold text-white hover:bg-primary-800 disabled:opacity-50">
                   <Plus size={16} />{saving ? "Posting…" : "Post thought"}
                 </button>
               </div>
@@ -376,10 +376,10 @@ export default function DiscussionsPage() {
               <h2 id="edit-post-title" className="text-lg font-semibold text-slate-900">Edit post</h2>
               <button type="button" onClick={() => setEditing(null)} className="rounded p-1 text-slate-400 hover:bg-slate-100" aria-label="Close"><X size={18} /></button>
             </div>
-            <textarea ref={editTextareaRef} value={editing.body} onChange={(event) => setEditing({ ...editing, body: event.target.value })} maxLength={MAX_LENGTH} rows={7} className="mt-4 w-full resize-y rounded-md border border-slate-300 p-3 text-sm leading-6 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100" />
+            <textarea ref={editTextareaRef} value={editing.body} onChange={(event) => setEditing({ ...editing, body: event.target.value })} maxLength={MAX_LENGTH} rows={7} className="mt-4 w-full resize-y rounded-md border border-slate-300 p-3 text-sm leading-6 outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100" />
             <div className="mt-4 flex justify-end gap-3">
               <button type="button" onClick={() => setEditing(null)} className="rounded-md px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-50">Cancel</button>
-              <button disabled={saving || !editing.body.trim()} className="rounded-md bg-blue-700 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-800 disabled:opacity-50">{saving ? "Saving…" : "Save changes"}</button>
+              <button disabled={saving || !editing.body.trim()} className="rounded-md bg-primary-700 px-4 py-2 text-sm font-semibold text-white hover:bg-primary-800 disabled:opacity-50">{saving ? "Saving…" : "Save changes"}</button>
             </div>
           </form>
         </div>

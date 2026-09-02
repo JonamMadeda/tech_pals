@@ -29,7 +29,7 @@ export default function Leaders() {
           transition={{ duration: 0.45 }}
           className="mb-10 max-w-2xl"
         >
-          <span className="mb-3 block font-mono text-xs font-semibold uppercase tracking-[0.14em] text-blue-700">Community leadership</span>
+          <span className="mb-3 block font-mono text-xs font-semibold uppercase tracking-[0.14em] text-primary-700">Community leadership</span>
           <h2 className="text-balance text-3xl font-semibold tracking-[-0.025em] text-slate-900 sm:text-4xl">Core group maintainers</h2>
           <p className="mt-4 leading-7 text-slate-600">The members currently trusted to guide the community, review core work, and help others build.</p>
         </motion.div>
@@ -38,7 +38,7 @@ export default function Leaders() {
           <p className="font-mono text-sm text-slate-500">Loading leadership roster…</p>
         ) : leaders.length === 0 ? (
           <div className="rounded-lg border border-dashed border-slate-300 bg-white p-10 text-center">
-            <Shield className="mx-auto mb-3 text-blue-500" size={28} />
+            <Shield className="mx-auto mb-3 text-primary-500" size={28} />
             <p className="font-mono text-sm text-slate-500">Leadership profiles will appear here once an admin assigns the leader role.</p>
           </div>
         ) : (
@@ -52,25 +52,25 @@ export default function Leaders() {
               <motion.article
                 key={leader.id}
                 variants={{ hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0 } }}
-                className="overflow-hidden rounded-lg border border-slate-200 bg-white p-6 transition hover:border-blue-200"
+                className="overflow-hidden rounded-lg border border-slate-200 bg-white p-6 transition hover:border-primary-200"
               >
                 <div className="flex items-start justify-between gap-4 border-b border-slate-100 pb-5">
                   <div className="flex min-w-0 items-center gap-4">
-                    <div className="relative grid h-14 w-14 shrink-0 place-items-center rounded-lg border border-blue-200 bg-blue-50 font-mono text-sm font-bold text-blue-700">
+                    <div className="relative grid h-14 w-14 shrink-0 place-items-center rounded-lg border border-primary-200 bg-primary-50 font-mono text-sm font-bold text-primary-700">
                       {leader.avatar || leader.name.slice(0, 2).toUpperCase()}
                     </div>
                     <div className="min-w-0">
                       <h3 className="truncate font-semibold text-slate-900">{leader.name}</h3>
-                      <p className="truncate font-mono text-xs text-blue-700">{leader.title || "Community leader"}</p>
+                      <p className="truncate font-mono text-xs text-primary-700">{leader.title || "Community leader"}</p>
                     </div>
                   </div>
-                  <span className="shrink-0 rounded border border-blue-200 bg-blue-50 px-2 py-1 font-mono text-[9px] font-bold tracking-widest text-blue-700">LEADER</span>
+                  <span className="shrink-0 rounded border border-primary-200 bg-primary-50 px-2 py-1 font-mono text-[9px] font-bold tracking-widest text-primary-700">LEADER</span>
                 </div>
 
                 <div className="mt-5 space-y-3">
                   <div className="flex items-center justify-between gap-2 border-b border-slate-100 pb-2 font-mono text-xs">
                     <span className="flex shrink-0 items-center gap-1.5 text-slate-400"><Key size={12} /> ROLE</span>
-                    <span className="min-w-0 truncate rounded bg-blue-50 px-1.5 py-0.5 text-[10px] text-blue-700">maintainer@tech_pals</span>
+                    <span className="min-w-0 truncate rounded bg-primary-50 px-1.5 py-0.5 text-[10px] text-primary-700">maintainer@tech_pals</span>
                   </div>
 
                   <div className="flex gap-2 text-sm leading-relaxed text-slate-600">

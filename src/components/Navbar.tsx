@@ -101,10 +101,10 @@ export default function Navbar() {
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "border-b border-slate-200 bg-white/80 backdrop-blur-md shadow-sm shadow-slate-200/50" : "bg-transparent border-b border-transparent"}`}>
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
         <a href="#" className="group flex items-center font-mono text-xl font-bold tracking-tight text-slate-900">
-          <span className="text-blue-500 transition-transform group-hover:translate-x-[-2px]">&lt;</span>
+          <span className="text-primary-500 transition-transform group-hover:translate-x-[-2px]">&lt;</span>
           <span>tech</span>
-          <span className="text-blue-600">_pals</span>
-          <span className="text-blue-500 transition-transform group-hover:translate-x-[2px]">&nbsp;/&gt;</span>
+          <span className="text-primary-600">_pals</span>
+          <span className="text-primary-500 transition-transform group-hover:translate-x-[2px]">&nbsp;/&gt;</span>
         </a>
 
         {/* Desktop nav */}
@@ -113,7 +113,7 @@ export default function Navbar() {
           <div ref={communityRef} className="relative">
             <button
               onClick={() => setCommunityOpen(!communityOpen)}
-              className={`flex items-center gap-1 font-mono text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-md transition-colors duration-200 ${communityLinks.some((l) => activeSection === l.href) ? "text-blue-600 bg-blue-50 border border-blue-200" : "text-slate-500 border border-transparent hover:text-slate-800 hover:bg-slate-100"}`}
+              className={`flex items-center gap-1 font-mono text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-md transition-colors duration-200 ${communityLinks.some((l) => activeSection === l.href) ? "text-primary-600 bg-primary-50 border border-primary-200" : "text-slate-500 border border-transparent hover:text-slate-800 hover:bg-slate-100"}`}
             >
               community
               <ChevronDown size={12} className={`transition-transform ${communityOpen ? "rotate-180" : ""}`} />
@@ -132,7 +132,7 @@ export default function Navbar() {
                       key={link.href}
                       href={link.href}
                       onClick={(e) => handleAnchorClick(e, link.href)}
-                      className={`block px-3 py-2 font-mono text-xs font-semibold uppercase tracking-wider transition-colors ${activeSection === link.href ? "text-blue-600 bg-blue-50" : "text-slate-500 hover:text-slate-800 hover:bg-slate-50"}`}
+                      className={`block px-3 py-2 font-mono text-xs font-semibold uppercase tracking-wider transition-colors ${activeSection === link.href ? "text-primary-600 bg-primary-50" : "text-slate-500 hover:text-slate-800 hover:bg-slate-50"}`}
                     >
                       {link.label}
                     </a>
@@ -163,7 +163,7 @@ export default function Navbar() {
                   <Shield size={12} />dashboard
                 </a>
               )}
-              <a href="/member" className="flex items-center gap-1.5 rounded-md border border-blue-200 bg-blue-50 px-3 py-1.5 font-mono text-xs font-semibold text-blue-700 hover:bg-blue-100">
+              <a href="/member" className="flex items-center gap-1.5 rounded-md border border-primary-200 bg-primary-50 px-3 py-1.5 font-mono text-xs font-semibold text-primary-700 hover:bg-primary-100">
                 <UserRound size={12} />my area
               </a>
               <button onClick={handleLogout} className="flex items-center gap-1.5 rounded-md border border-slate-200 px-2.5 py-1.5 font-mono text-xs font-semibold text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-700">
@@ -171,7 +171,7 @@ export default function Navbar() {
               </button>
             </div>
           ) : (
-            <a href="/login" className="flex items-center gap-1.5 rounded-md bg-blue-600 px-3 py-1.5 font-mono text-xs font-bold uppercase tracking-wider text-white transition-colors hover:bg-blue-700">
+            <a href="/login" className="flex items-center gap-1.5 rounded-md bg-primary-600 px-3 py-1.5 font-mono text-xs font-bold uppercase tracking-wider text-white transition-colors hover:bg-primary-700">
               <LogIn size={12} />login
             </a>
           )}
@@ -179,7 +179,7 @@ export default function Navbar() {
 
         {/* Mobile toggle */}
         <button
-          className="relative z-50 flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white/80 text-slate-500 transition-all hover:border-blue-300 hover:text-slate-800 md:hidden"
+          className="relative z-50 flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white/80 text-slate-500 transition-all hover:border-primary-300 hover:text-slate-800 md:hidden"
           onClick={() => setOpen(!open)}
           aria-label="Toggle menu"
         >
@@ -204,7 +204,7 @@ export default function Navbar() {
                   key={link.href}
                   href={link.href}
                   onClick={(e) => handleAnchorClick(e, link.href)}
-                  className={`rounded-md px-3 py-2 font-mono text-sm font-semibold transition-colors ${activeSection === link.href ? "text-blue-600 bg-blue-50 border-l-2 border-blue-600" : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"}`}
+                  className={`rounded-md px-3 py-2 font-mono text-sm font-semibold transition-colors ${activeSection === link.href ? "text-primary-600 bg-primary-50 border-l-2 border-primary-600" : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"}`}
                 >
                   {link.label}
                 </a>
@@ -229,7 +229,7 @@ export default function Navbar() {
                       <Shield size={14} />admin dashboard
                     </a>
                   )}
-                  <a href="/member" className="flex items-center gap-2 rounded-md px-3 py-2 font-mono text-sm font-semibold text-blue-700 hover:bg-blue-50">
+                  <a href="/member" className="flex items-center gap-2 rounded-md px-3 py-2 font-mono text-sm font-semibold text-primary-700 hover:bg-primary-50">
                     <UserRound size={14} />member area
                   </a>
                   <button onClick={handleLogout} className="flex items-center gap-2 rounded-md px-3 py-2 text-left font-mono text-sm font-semibold text-slate-500 hover:bg-slate-50 hover:text-slate-900">
@@ -237,7 +237,7 @@ export default function Navbar() {
                   </button>
                 </>
               ) : (
-                <a href="/login" className="flex items-center justify-center gap-2 rounded-md bg-blue-600 px-3 py-2.5 font-mono text-sm font-bold uppercase text-white hover:bg-blue-700">
+                <a href="/login" className="flex items-center justify-center gap-2 rounded-md bg-primary-600 px-3 py-2.5 font-mono text-sm font-bold uppercase text-white hover:bg-primary-700">
                   <LogIn size={14} />login
                 </a>
               )}

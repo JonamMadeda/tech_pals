@@ -23,10 +23,10 @@ function ProjectCard({ project, index, inView, onReadMore }: { project: Project;
       initial={{ opacity: 0, y: 22 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ delay: index * 0.1 }}
-      className="flex h-72 flex-col rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-blue-200 hover:shadow-md"
+      className="flex h-72 flex-col rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-primary-200 hover:shadow-md"
     >
       <div className="flex items-center gap-2">
-        <span className="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-blue-50 font-mono text-[10px] font-bold text-blue-600">{project.member_avatar || project.member_name.slice(0, 2).toUpperCase()}</span>
+        <span className="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-primary-50 font-mono text-[10px] font-bold text-primary-600">{project.member_avatar || project.member_name.slice(0, 2).toUpperCase()}</span>
         <span className="truncate font-mono text-[10px] text-slate-500">{project.member_name}</span>
       </div>
 
@@ -35,9 +35,9 @@ function ProjectCard({ project, index, inView, onReadMore }: { project: Project;
       <p ref={summaryRef} className="mt-2 line-clamp-3 text-sm leading-relaxed text-slate-600">{text}</p>
 
       <div className="mt-auto pt-3">
-        <div className="flex flex-wrap gap-1">{project.tags?.slice(0, 3).map((tag) => <span key={tag} className="rounded bg-blue-50 px-2 py-0.5 font-mono text-[10px] text-blue-700">{tag}</span>)}</div>
+        <div className="flex flex-wrap gap-1">{project.tags?.slice(0, 3).map((tag) => <span key={tag} className="rounded bg-primary-50 px-2 py-0.5 font-mono text-[10px] text-primary-700">{tag}</span>)}</div>
         {overflows && (
-          <button onClick={() => onReadMore(project)} className="mt-2 inline-flex items-center gap-1 font-mono text-[11px] font-bold text-blue-600 hover:text-blue-700">
+          <button onClick={() => onReadMore(project)} className="mt-2 inline-flex items-center gap-1 font-mono text-[11px] font-bold text-primary-600 hover:text-primary-700">
             Read More <ArrowUpRight size={12} />
           </button>
         )}
@@ -73,15 +73,15 @@ export default function ProjectsPreview() {
       <div className="mx-auto max-w-6xl">
         <motion.div initial={{ opacity: 0, y: 30 }} animate={inView ? { opacity: 1, y: 0 } : {}} className="mb-10 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
           <div className="max-w-xl">
-            <span className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-blue-700">Featured work</span>
+            <span className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-primary-700">Featured work</span>
             <h2 className="mt-2 text-3xl font-semibold tracking-[-0.025em] text-slate-900 sm:text-4xl">What the community is building.</h2>
             <p className="mt-3 text-slate-600">Fresh work from member portfolios, updated automatically as projects are published.</p>
           </div>
-          <Link href="/projects" className="inline-flex items-center gap-1.5 font-mono text-xs font-bold text-blue-600 hover:text-blue-700">view all projects <ArrowUpRight size={14} /></Link>
+          <Link href="/projects" className="inline-flex items-center gap-1.5 font-mono text-xs font-bold text-primary-600 hover:text-primary-700">view all projects <ArrowUpRight size={14} /></Link>
         </motion.div>
         {projects.length === 0 ? (
           <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50 p-10 text-center">
-            <FolderKanban className="mx-auto mb-3 text-blue-400" size={28} />
+            <FolderKanban className="mx-auto mb-3 text-primary-400" size={28} />
             <p className="font-mono text-sm text-slate-500">Projects added by members will appear here.</p>
           </div>
         ) : (
@@ -97,11 +97,11 @@ export default function ProjectsPreview() {
             <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} transition={{ duration: 0.15 }} className="relative max-h-[85vh] w-full max-w-lg overflow-y-auto rounded-2xl border border-slate-200 bg-white p-6 shadow-xl" onClick={(e) => e.stopPropagation()}>
               <button onClick={() => setModalProject(null)} className="absolute right-4 top-4 rounded-lg p-1 text-slate-400 transition hover:bg-slate-100 hover:text-slate-600"><X size={18} /></button>
               <div className="flex items-center gap-2">
-                <span className="grid h-8 w-8 shrink-0 place-items-center rounded-md bg-blue-50 font-mono text-[11px] font-bold text-blue-600">{modalProject.member_avatar || modalProject.member_name.slice(0, 2).toUpperCase()}</span>
+                <span className="grid h-8 w-8 shrink-0 place-items-center rounded-md bg-primary-50 font-mono text-[11px] font-bold text-primary-600">{modalProject.member_avatar || modalProject.member_name.slice(0, 2).toUpperCase()}</span>
                 <span className="font-mono text-xs text-slate-500">{modalProject.member_name}</span>
               </div>
               <h2 className="mt-4 text-2xl font-bold text-slate-900">{modalProject.title}</h2>
-              <div className="mt-3 flex flex-wrap gap-1.5">{modalProject.tags?.map((tag) => <span key={tag} className="rounded border border-blue-100 bg-blue-50 px-2 py-0.5 font-mono text-[10px] text-blue-700">{tag}</span>)}</div>
+              <div className="mt-3 flex flex-wrap gap-1.5">{modalProject.tags?.map((tag) => <span key={tag} className="rounded border border-primary-100 bg-primary-50 px-2 py-0.5 font-mono text-[10px] text-primary-700">{tag}</span>)}</div>
               <p className="mt-5 text-sm leading-relaxed text-slate-600">{modalProject.summary || "Explore this community project."}</p>
             </motion.div>
           </motion.div>

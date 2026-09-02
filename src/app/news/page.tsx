@@ -45,20 +45,20 @@ export default function NewsPage() {
       <header className="sticky top-0 z-20 overflow-hidden border-b border-slate-200 bg-white/85 backdrop-blur">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
           <Link href="/" className="font-mono text-lg font-bold text-slate-900">
-            <span className="text-blue-500">&lt;</span>tech<span className="text-blue-600">_pals</span>
-            <span className="text-blue-500"> /&gt;</span>
+            <span className="text-primary-500">&lt;</span>tech<span className="text-primary-600">_pals</span>
+            <span className="text-primary-500"> /&gt;</span>
           </Link>
           <div className="flex gap-3 font-mono text-xs">
             <Link href="/" className="rounded border border-slate-200 px-3 py-2 text-slate-600 hover:bg-slate-50">home</Link>
             <Link href="/projects" className="rounded border border-slate-200 px-3 py-2 text-slate-600 hover:bg-slate-50">projects</Link>
-            <Link href="/member" className="rounded bg-blue-600 px-3 py-2 font-semibold text-white hover:bg-blue-700">member area</Link>
+            <Link href="/member" className="rounded bg-primary-600 px-3 py-2 font-semibold text-white hover:bg-primary-700">member area</Link>
           </div>
         </div>
       </header>
 
       <main className="mx-auto max-w-6xl px-6 py-14">
         <div className="mb-10 max-w-2xl">
-          <span className="font-mono text-xs font-semibold tracking-widest text-blue-600">[ AI_INTEL ]</span>
+          <span className="font-mono text-xs font-semibold tracking-widest text-primary-600">[ AI_INTEL ]</span>
           <h1 className="mt-3 text-4xl font-bold text-slate-900 sm:text-5xl">AI news that matters.</h1>
           <p className="mt-4 leading-relaxed text-slate-600">Curated headlines from leading AI and tech publications, updated daily.</p>
         </div>
@@ -71,7 +71,7 @@ export default function NewsPage() {
                 value={query}
                 onChange={(event) => { setQuery(event.target.value); setPage(1); }}
                 placeholder="Search articles, topics, or sources"
-                className="w-full rounded-lg border border-slate-200 bg-slate-50 py-2.5 pl-9 pr-3 font-mono text-xs text-slate-800 outline-none focus:border-blue-400 focus:bg-white"
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 py-2.5 pl-9 pr-3 font-mono text-xs text-slate-800 outline-none focus:border-primary-400 focus:bg-white"
               />
             </div>
             <label className="flex items-center gap-2 font-mono text-xs text-slate-500">
@@ -91,7 +91,7 @@ export default function NewsPage() {
             <p className="font-mono text-sm text-slate-500">$ fetching latest AI news...</p>
           ) : filtered.length === 0 ? (
             <div className="rounded-xl border border-dashed border-slate-300 bg-white px-6 py-14 text-center">
-              <Newspaper className="mx-auto mb-3 text-blue-400" size={32} />
+              <Newspaper className="mx-auto mb-3 text-primary-400" size={32} />
               <h2 className="font-bold text-slate-800">No articles found.</h2>
               <p className="mx-auto mt-2 max-w-sm text-sm text-slate-500">Try a different search term or check back later.</p>
             </div>
@@ -113,15 +113,15 @@ export default function NewsPage() {
                   >
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-3">
-                        <span className="shrink-0 rounded bg-blue-50 px-2 py-0.5 font-mono text-[10px] font-semibold text-blue-700">{article.source}</span>
+                        <span className="shrink-0 rounded bg-primary-50 px-2 py-0.5 font-mono text-[10px] font-semibold text-primary-700">{article.source}</span>
                         <time className="shrink-0 font-mono text-[10px] text-slate-400">
                           {new Date(article.pubDate).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}
                         </time>
                       </div>
-                      <h2 className="mt-2 font-bold leading-snug text-slate-900 line-clamp-2 group-hover:text-blue-700">{article.title}</h2>
+                      <h2 className="mt-2 font-bold leading-snug text-slate-900 line-clamp-2 group-hover:text-primary-700">{article.title}</h2>
                       <p className="mt-1 text-sm leading-relaxed text-slate-500 line-clamp-2">{article.snippet || "No summary available."}</p>
                     </div>
-                    <ExternalLink size={15} className="mt-1.5 shrink-0 text-slate-300 transition group-hover:text-blue-500" />
+                    <ExternalLink size={15} className="mt-1.5 shrink-0 text-slate-300 transition group-hover:text-primary-500" />
                   </a>
                 ))}
               </div>

@@ -18,10 +18,10 @@ export default function Footer() {
             href="#"
             className="group flex items-center justify-center md:justify-start font-mono text-lg font-bold tracking-tight text-slate-900"
           >
-            <span className="text-blue-500 transition-transform group-hover:translate-x-[-1px]">&lt;</span>
+            <span className="text-primary-500 transition-transform group-hover:translate-x-[-1px]">&lt;</span>
             <span>tech</span>
-            <span className="text-blue-600">_pals</span>
-            <span className="text-blue-500 transition-transform group-hover:translate-x-[1px]">&nbsp;/&gt;</span>
+            <span className="text-primary-600">_pals</span>
+            <span className="text-primary-500 transition-transform group-hover:translate-x-[1px]">&nbsp;/&gt;</span>
           </a>
           <p className="mt-1.5 text-xs text-slate-500 font-mono">
             Where developers connect & build together.
@@ -34,7 +34,7 @@ export default function Footer() {
             <a
               key={link.label}
               href={link.href}
-              className="font-mono text-xs font-semibold uppercase tracking-wider text-slate-500 transition-colors hover:text-blue-600"
+              className="font-mono text-xs font-semibold uppercase tracking-wider text-slate-500 transition-colors hover:text-primary-600"
             >
               /{link.label}
             </a>
@@ -76,15 +76,15 @@ export default function Footer() {
         {/* Live system status dashboard bar */}
         <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 select-none">
           <span className="flex items-center gap-1 border border-slate-200 bg-slate-100/60 px-2 py-0.5 rounded text-slate-600 shadow-sm">
-            <Activity size={10} className="text-blue-600" />
+            <Activity size={10} className="text-primary-600" />
             <span>STATUS: NOMINAL</span>
           </span>
           <span className="flex items-center gap-1 border border-slate-200 bg-slate-100/60 px-2 py-0.5 rounded text-slate-600 shadow-sm">
-            <Wifi size={10} className="text-blue-600" />
+            <Wifi size={10} className="text-primary-600" />
             <span>PING: 14MS</span>
           </span>
           <span className="flex items-center gap-1 border border-slate-200 bg-slate-100/60 px-2 py-0.5 rounded text-slate-600 shadow-sm">
-            <Terminal size={10} className="text-blue-600" />
+            <Terminal size={10} className="text-primary-600" />
             <span>ENV: PRODUCTION</span>
           </span>
           <span className="border border-slate-200 bg-slate-100/60 px-2 py-0.5 rounded text-slate-600 shadow-sm">

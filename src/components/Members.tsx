@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useInView } from "framer-motion";
 import { Globe, Github, Linkedin, Search, Code } from "lucide-react";
-import Link from "next/link";
+import MemberModal from "./MemberModal";
 
 type Member = {
   id: number;
@@ -37,6 +37,7 @@ export default function Members() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTag, setSelectedTag] = useState("ALL");
+  const [selectedMember, setSelectedMember] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/api/members")
@@ -59,17 +60,19 @@ export default function Members() {
 
   const allTags = collectTags(members);
 
-  const filteredMembers = members.filter((member) => {
-    const matchesSearch =
-      member.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      member.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      member.bio.toLowerCase().includes(searchQuery.toLowerCase());
+  const filteredMembers = members
+    .filter((member) => {
+      const matchesSearch =
+        member.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        member.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        member.bio.toLowerCase().includes(searchQuery.toLowerCase());
 
-    const matchesTag =
-      selectedTag === "ALL" || member.tags?.includes(selectedTag);
+      const matchesTag =
+        selectedTag === "ALL" || member.tags?.includes(selectedTag);
 
-    return matchesSearch && matchesTag;
-  });
+      return matchesSearch && matchesTag;
+    })
+    .sort((a, b) => a.name.localeCompare(b.name));
 
   return (
     <section
@@ -85,7 +88,7 @@ export default function Members() {
           transition={{ duration: 0.6 }}
           className="mb-10 max-w-2xl"
         >
-          <span className="mb-2 block text-xs font-mono font-semibold uppercase tracking-widest text-blue-600">
+          <span className="mb-2 block text-xs font-mono font-semibold uppercase tracking-widest text-primary-600">
             Community directory
           </span>
           <h2 className="text-balance text-3xl font-semibold tracking-[-0.025em] text-slate-900 sm:text-4xl">
@@ -100,7 +103,7 @@ export default function Members() {
         <div className="mb-8 flex flex-col gap-4 border-y border-slate-200 py-4 md:flex-row md:items-center md:justify-between">
           {/* CLI Search Input */}
           <div className="relative flex-1 max-w-md">
-            <span className="absolute inset-y-0 left-3.5 flex items-center text-blue-600 font-mono text-xs pointer-events-none select-none">
+            <span className="absolute inset-y-0 left-3.5 flex items-center text-primary-600 font-mono text-xs pointer-events-none select-none">
               Search
             </span>
             <input
@@ -108,7 +111,7 @@ export default function Members() {
               placeholder="Name, role, or skill"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-lg border border-slate-200 bg-white pl-24 pr-4 py-2.5 font-mono text-xs text-slate-800 placeholder-slate-400 focus:border-blue-500/50 focus:outline-none transition-colors"
+              className="w-full rounded-lg border border-slate-200 bg-white pl-24 pr-4 py-2.5 font-mono text-xs text-slate-800 placeholder-slate-400 focus:border-primary-500/50 focus:outline-none transition-colors"
             />
             <Search className="absolute right-3.5 top-3 text-slate-400" size={14} />
           </div>
@@ -123,11 +126,11 @@ export default function Members() {
                   onClick={() => setSelectedTag(tag)}
                   className={`rounded px-2.5 py-1 text-[11px] font-mono border transition-all duration-200 ${
                     isActive
-                      ? "bg-blue-50 border-blue-200 text-blue-700 font-semibold"
+                      ? "bg-primary-50 border-primary-200 text-primary-700 font-semibold"
                       : "bg-white border-slate-200 text-slate-500 hover:border-slate-400 hover:text-slate-700"
                   }`}
                 >
-                  {isActive && <span className="mr-1 text-blue-600">✓</span>}
+                  {isActive && <span className="mr-1 text-primary-600">✓</span>}
                   {tag.toLowerCase()}
                 </button>
               );
@@ -150,7 +153,8 @@ export default function Members() {
                 transition={{ duration: 0.3 }}
                 key={member.id}
                 whileHover={{ y: -4, borderColor: "rgba(59, 130, 246, 0.3)" }}
-                className="group relative flex flex-col justify-between overflow-hidden rounded-lg border border-slate-200 bg-white p-5 transition-colors hover:border-blue-200"
+                onClick={() => setSelectedMember(member.username || String(member.id))}
+                className="group relative flex cursor-pointer flex-col justify-between overflow-hidden rounded-lg border border-slate-200 bg-white p-5 transition-colors hover:border-primary-200"
               >
                 <div>
                   <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-4 select-none">
@@ -163,29 +167,29 @@ export default function Members() {
                   </div>
 
                   <div className="flex items-start gap-4">
-                    <Link href={`/member/${member.username || member.id}`} className="shrink-0" aria-label={`${member.name} profile`}>
+                    <div className="shrink-0" aria-label={`${member.name} profile`}>
                       {member.avatar.startsWith("data:") || member.avatar.startsWith("http") ? (
                         <img src={member.avatar} alt={member.name} className="h-12 w-12 rounded-full border border-slate-200 object-cover" />
                       ) : (
-                        <div className="flex h-12 w-12 items-center justify-center rounded-full border border-slate-200 bg-slate-50 text-sm font-bold text-slate-500 transition-all group-hover:border-blue-200 group-hover:text-blue-600 select-none">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-full border border-slate-200 bg-slate-50 text-sm font-bold text-slate-500 transition-all group-hover:border-primary-200 group-hover:text-primary-600 select-none">
                           {member.avatar}
                         </div>
                       )}
-                    </Link>
+                    </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <Link href={`/member/${member.username || member.id}`} className="min-w-0">
-                          <h3 className="text-sm font-bold text-slate-900 truncate hover:text-blue-600 transition-colors">
+                        <div className="min-w-0">
+                          <h3 className="text-sm font-bold text-slate-900 truncate group-hover:text-primary-600 transition-colors">
                             {member.name}
                           </h3>
-                        </Link>
+                      </div>
                         <span
                           className={`shrink-0 rounded px-1.5 py-0.5 text-[9px] font-mono font-bold uppercase ${
                             member.role === "admin"
                               ? "bg-amber-100 text-amber-700"
                               : member.role === "leader"
                               ? "bg-purple-100 text-purple-700"
-                              : "bg-blue-100 text-blue-700"
+                              : "bg-primary-100 text-primary-700"
                           }`}
                         >
                           {member.role}
@@ -238,7 +242,7 @@ export default function Members() {
                       {member.tags.map((tag) => (
                         <span
                           key={tag}
-                          className="rounded px-2 py-0.5 text-[9px] font-mono font-semibold bg-blue-50 border border-blue-100 text-blue-700"
+                          className="rounded px-2 py-0.5 text-[9px] font-mono font-semibold bg-primary-50 border border-primary-100 text-primary-700"
                         >
                           {tag}
                         </span>
@@ -248,7 +252,7 @@ export default function Members() {
 
                   <div className="mt-4 border-t border-slate-100 pt-3 flex items-center justify-between text-[10px] font-mono text-slate-400">
                     <span className="flex items-center gap-1"><Code size={10} /> {member.lang}</span>
-                    <span className="text-slate-500">Commits: <strong className="text-blue-600 font-medium">{member.commits}</strong></span>
+                    <span className="text-slate-500">Commits: <strong className="text-primary-600 font-medium">{member.commits}</strong></span>
                   </div>
                 </div>
               </motion.div>
@@ -265,7 +269,7 @@ export default function Members() {
           >
             {loading ? (
               <p className="font-mono text-sm text-slate-400">
-                <span className="text-blue-600">$</span> loading members...
+                <span className="text-primary-600">$</span> loading members...
               </p>
             ) : members.length === 0 ? (
               <div>
@@ -274,7 +278,7 @@ export default function Members() {
                 </p>
                 <p className="font-mono text-xs text-slate-400">
                   Admins can add members from the{" "}
-                  <a href="/dashboard" className="text-blue-600 hover:underline">
+                  <a href="/dashboard" className="text-primary-600 hover:underline">
                     dashboard
                   </a>.
                 </p>
@@ -287,6 +291,13 @@ export default function Members() {
           </motion.div>
         )}
       </div>
+
+      {selectedMember && (
+        <MemberModal
+          identifier={selectedMember}
+          onClose={() => setSelectedMember(null)}
+        />
+      )}
     </section>
   );
 }

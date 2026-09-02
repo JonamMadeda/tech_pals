@@ -19,13 +19,13 @@ export default function About() {
     <section id="about" ref={ref} className="border-t border-slate-200 bg-[#fafaf8] px-6 py-16 md:py-24">
       <div className="mx-auto max-w-6xl">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.45 }} className="mb-10 max-w-2xl">
-          <p className="mb-3 font-mono text-xs font-semibold uppercase tracking-[0.14em] text-blue-700">What we do</p>
+          <p className="mb-3 font-mono text-xs font-semibold uppercase tracking-[0.14em] text-primary-700">What we do</p>
           <h2 className="text-balance text-3xl font-semibold tracking-[-0.025em] text-slate-900 sm:text-4xl">A community designed around doing the work.</h2>
           <p className="mt-4 leading-7 text-slate-600">We bring together curious people across engineering, design, cloud, AI, and security to learn, build, and grow in public.</p>
         </motion.div>
         <motion.div initial="hidden" animate={isInView ? "visible" : "hidden"} variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.08 } } }} className="grid divide-y divide-slate-200 border-y border-slate-200 sm:grid-cols-2 sm:divide-x sm:divide-y-0">
           {features.map(({ icon: Icon, title, desc }) => <motion.article key={title} variants={{ hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 0 } }} className="p-6 first:pl-0 sm:px-8 sm:py-7 sm:odd:pl-0 sm:even:pr-0">
-            <span className="grid h-10 w-10 place-items-center rounded-md bg-blue-50 text-blue-700"><Icon size={19} /></span>
+            <span className="grid h-10 w-10 place-items-center rounded-md bg-primary-50 text-primary-700"><Icon size={19} /></span>
             <h3 className="mt-5 text-base font-semibold text-slate-900">{title}</h3>
             <p className="mt-2 text-sm leading-6 text-slate-600">{desc}</p>
           </motion.article>)}
