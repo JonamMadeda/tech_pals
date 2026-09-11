@@ -38,7 +38,10 @@ export async function POST(request: Request) {
     }
 
     // Call Neon Auth reset-password endpoint
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+    const appUrl =
+      request.headers.get("origin") ??
+      process.env.NEXT_PUBLIC_APP_URL ??
+      "http://localhost:3000";
     const neonRes = await fetch(`${NEON_AUTH_URL}/reset-password`, {
       method: "POST",
       headers: {

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Mail, ArrowLeft, CheckCircle } from "lucide-react";
+import { fetchWithCsrf } from "@/lib/csrf-client";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
@@ -16,7 +17,7 @@ export default function ForgotPasswordPage() {
     setSubmitting(true);
 
     try {
-      const res = await fetch("/api/auth/forgot-password", {
+      const res = await fetchWithCsrf("/api/auth/forgot-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),

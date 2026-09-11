@@ -70,17 +70,23 @@ export async function POST(request: Request) {
     }
 
     // Create user via Neon Auth HTTP API
+    // Prefer the live request Origin so Neon Auth accepts the call on any deployed domain.
+    const appOrigin =
+      request.headers.get("origin") ??
+      process.env.NEXT_PUBLIC_APP_URL ??
+      "http://localhost:3000";
     const neonRes = await fetch(`${NEON_AUTH_URL}/sign-up/email`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Origin": process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
+        "Origin": appOrigin,
       },
       body: JSON.stringify({ email, password, name }),
     });
 
     if (!neonRes.ok) {
       const errorBody = await neonRes.json().catch(() => null);
+      console.error("Neon Auth sign-up failed:", neonRes.status, errorBody);
       const errorMsg = errorBody?.message || "Failed to create account";
       return NextResponse.json({ error: errorMsg }, { status: 400 });
     }
@@ -107,7 +113,8 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({ member }, { status: 201 });
-  } catch {
+  } catch (err) {
+    console.error("Register error:", err);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

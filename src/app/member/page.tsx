@@ -4,6 +4,7 @@ import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
 import { AlertTriangle, ExternalLink, FolderKanban, ImagePlus, KeyRound, Pencil, Plus, Save, Star, Trash2, UserRound, Video, X } from "lucide-react";
 import { signOut } from "@/lib/auth/client";
+import { fetchWithCsrf } from "@/lib/csrf-client";
 import { isValidUrl, isValidUsername, normalizeTags, toNonNegativeInt } from "@/lib/validation";
 
 type Profile = { id: number; email: string; username: string | null; name: string; avatar: string; title: string; bio: string; tags: string[] | null; github: string; linkedin: string; website: string; commits: number; prs: number; lang: string; created_at: string; last_login_at: string | null };
@@ -151,7 +152,7 @@ export default function MemberPage() {
     if (newPassword !== String(data.get("confirmPassword") ?? "")) { setNotice("New passwords do not match."); return; }
     setSaving("password");
     try {
-      const response = await fetch("/api/auth/change-password", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ currentPassword: data.get("currentPassword"), newPassword }) });
+      const response = await fetchWithCsrf("/api/auth/change-password", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ currentPassword: data.get("currentPassword"), newPassword }) });
       const body = await response.json();
       setNotice(response.ok ? "Password updated successfully." : body.error ?? "Could not update password.");
       if (response.ok) setModal(null);

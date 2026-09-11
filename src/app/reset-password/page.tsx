@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Lock, ArrowLeft, CheckCircle, AlertCircle } from "lucide-react";
+import { fetchWithCsrf } from "@/lib/csrf-client";
 
 function ResetPasswordForm() {
   const searchParams = useSearchParams();
@@ -44,7 +45,7 @@ function ResetPasswordForm() {
     setSubmitting(true);
 
     try {
-      const res = await fetch("/api/auth/reset-password", {
+      const res = await fetchWithCsrf("/api/auth/reset-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token, newPassword }),

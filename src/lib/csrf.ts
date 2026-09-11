@@ -10,6 +10,10 @@ export function generateCsrfToken(): string {
   return Array.from(array, (b) => b.toString(16).padStart(2, "0")).join("");
 }
 
+function isSecureRequest(): boolean {
+  return process.env.NODE_ENV === "production";
+}
+
 export async function getCsrfToken(): Promise<string> {
   const cookieStore = await cookies();
   let token = cookieStore.get(CSRF_COOKIE_NAME)?.value;
@@ -17,8 +21,8 @@ export async function getCsrfToken(): Promise<string> {
     token = generateCsrfToken();
     cookieStore.set(CSRF_COOKIE_NAME, token, {
       httpOnly: true,
-      secure: true,
-      sameSite: "strict",
+      secure: isSecureRequest(),
+      sameSite: "lax",
       path: "/",
       maxAge: 60 * 60 * 24 * 30, // 30 days
     });
@@ -70,8 +74,8 @@ export function csrfProtection() {
 export async function setCsrfCookie(response: NextResponse, token: string) {
   response.cookies.set(CSRF_COOKIE_NAME, token, {
     httpOnly: true,
-    secure: true,
-    sameSite: "strict",
+    secure: isSecureRequest(),
+    sameSite: "lax",
     path: "/",
     maxAge: 60 * 60 * 24 * 30,
   });

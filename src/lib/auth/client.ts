@@ -1,5 +1,7 @@
 "use client";
 
+import { fetchWithCsrf } from "@/lib/csrf-client";
+
 export async function signIn(email: string, password: string) {
   const res = await fetch("/api/auth/login", {
     method: "POST",
@@ -19,7 +21,7 @@ export async function signUp(email: string, password: string, name: string) {
 }
 
 export async function signOut() {
-  const res = await fetch("/api/auth/logout", { method: "POST" });
+  const res = await fetchWithCsrf("/api/auth/logout", { method: "POST" });
   return res.json();
 }
 

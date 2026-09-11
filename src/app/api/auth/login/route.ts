@@ -26,11 +26,15 @@ export async function POST(request: Request) {
     const existingUser = await getUserByEmail(email);
 
     // Forward the request to Neon Auth directly (preserving cookies)
+    const appOrigin =
+      request.headers.get("origin") ??
+      process.env.NEXT_PUBLIC_APP_URL ??
+      "http://localhost:3000";
     const neonRes = await fetch(`${NEON_AUTH_URL}/sign-in/email`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Origin": process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
+        "Origin": appOrigin,
       },
       body: JSON.stringify({ email, password }),
       redirect: "manual",

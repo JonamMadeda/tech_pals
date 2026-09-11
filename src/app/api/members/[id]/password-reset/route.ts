@@ -13,7 +13,10 @@ export async function POST(request: Request, { params }: { params: { id: string 
   if (admin?.role !== "admin") return NextResponse.json({ error: "Administrator access required" }, { status: 403 });
   const member = await getUserById(Number(params.id));
   if (!member || member.role === "admin") return NextResponse.json({ error: "Member not found" }, { status: 404 });
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+  const appUrl =
+    request.headers.get("origin") ??
+    process.env.NEXT_PUBLIC_APP_URL ??
+    "http://localhost:3000";
   const response = await fetch(`${NEON_AUTH_URL}/request-password-reset`, {
     method: "POST",
     headers: { "Content-Type": "application/json", Origin: appUrl },
